@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.momchilgenov.springboot</groupId>
-	<artifactId>service-core</artifactId>
+	<artifactId>servicecore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>service-core</name>
+	<name>servicecore</name>
 	<description>Service Layer Project for Expense Tracker</description>
 	<url/>
 	<licenses>

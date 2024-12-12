@@ -1,10 +1,10 @@
-package com.momchilgenov.springboot.service_core;
+package com.momchilgenov.springboot.servicecore;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServiceCoreApplicationTests {
+class ServicecoreApplicationTests {
 
 	@Test
 	void contextLoads() {
