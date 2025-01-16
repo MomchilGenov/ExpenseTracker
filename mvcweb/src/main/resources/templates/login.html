@@ -5,14 +5,14 @@
     <title>Login</title>
 </head>
 <body>
-<form th:action="login" th:method="POST">
+<form th:action="@{/login}" th:method="POST">
     Username:
     <br><br>
-    <input type="text" placeholder="Enter username"/>
+    <input type="text" placeholder="Enter username" th:field="${user.username}"/>
     <br><br>
     Password
     <br><br>
-    <input type="password"/>
+    <input type="password" th:field="${user.password}"/>
     <br><br>
     <input type="submit" th:value="Login"/>
 </form>
