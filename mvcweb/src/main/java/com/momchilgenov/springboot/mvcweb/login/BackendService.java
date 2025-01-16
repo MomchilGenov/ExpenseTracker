@@ -1,12 +1,17 @@
 package com.momchilgenov.springboot.mvcweb.login;
 
 import com.momchilgenov.springboot.mvcweb.entity.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class BackendService {
-    private final String URL_OF_JWT_AUTHENTICATOR = "custom url";
+    private final String URL_OF_JWT_AUTHENTICATOR;
+
+    public BackendService(@Value("${URL_OF_JWT_AUTHENTICATOR}") String URL_OF_JWT_AUTHENTICATOR) {
+        this.URL_OF_JWT_AUTHENTICATOR = URL_OF_JWT_AUTHENTICATOR;
+    }
 
     public String authenticateUser(String username, String password) {
         String str = "This is a trivial public message";
