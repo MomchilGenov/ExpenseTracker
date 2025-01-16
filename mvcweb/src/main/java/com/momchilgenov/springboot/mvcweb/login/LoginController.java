@@ -15,17 +15,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.security.Principal;
-
 @Controller
 public class LoginController {
 
     private final AuthenticationManager authenticationManager;
-    private final String URL_OF_JWT_AUTHENTICATOR = "custom url";
 
     @Autowired
     public LoginController(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+
     }
 
     @GetMapping("/login")
