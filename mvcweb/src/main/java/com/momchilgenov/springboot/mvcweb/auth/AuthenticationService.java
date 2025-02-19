@@ -1,4 +1,4 @@
-package com.momchilgenov.springboot.mvcweb.login;
+package com.momchilgenov.springboot.mvcweb.auth;
 
 import com.momchilgenov.springboot.mvcweb.entity.User;
 import org.springframework.beans.factory.annotation.Value;

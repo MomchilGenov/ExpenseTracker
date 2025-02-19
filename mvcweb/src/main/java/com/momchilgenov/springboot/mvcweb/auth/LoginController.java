@@ -1,12 +1,12 @@
 package com.momchilgenov.springboot.mvcweb.login;
 
 import com.momchilgenov.springboot.mvcweb.entity.User;
+import com.momchilgenov.springboot.mvcweb.auth.JwtAuthenticationToken;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -28,6 +28,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String showLoginForm(Model model) {
+        //todo - check if user is authenticated, if is authenticated - redirect to homepage(could enter url in search bar
         model.addAttribute("user", new User());
         System.out.println("In login controller");
         return "login";
@@ -36,6 +37,7 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@ModelAttribute("user") User user, HttpServletResponse response) {
         System.out.println("in login POST method");
+        //todo - check if user is authenticated, if is authenticated - redirect to homepage(could enter url in search bar)
         //test purposes jwt
         String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.UJpLFJc3GLacvl2Y5v0k1NNkcJxUBMBL0_wqBaJoJ9I";
         try {
@@ -43,9 +45,15 @@ public class LoginController {
             cookie.setHttpOnly(true);
             cookie.setPath("/");
             response.addCookie(cookie);
-            Authentication authentication =
-                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-
+            /*
+             * calls the only available authentication provider - that
+             * is my custom authentication provider that sends credentials to AuthenticationService
+             * that authenticates the user and returns a generated jwt or an error
+             * */
+            //should also call backend service to receive the jwt and store it
+            JwtAuthenticationToken authentication =
+                    (JwtAuthenticationToken) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+            System.out.println("Backend returned jwt: " + authentication.getJWT());
 
         } catch (AuthenticationException e) {
             System.out.println("Did not work");
