@@ -1,6 +1,5 @@
 package com.momchilgenov.springboot.mvcweb.security;
 
-import com.momchilgenov.springboot.mvcweb.login.PreJwtAuthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +20,10 @@ public class SecurityConfig {
 
 
     private final JwtAuthFilter filter;
-    private final PreJwtAuthProvider authProvider;
+    private final JwtAuthProvider authProvider;
 
     @Autowired
-    public SecurityConfig(JwtAuthFilter authFilter, PreJwtAuthProvider authProvider) {
+    public SecurityConfig(JwtAuthFilter authFilter, JwtAuthProvider authProvider) {
         this.filter = authFilter;
         this.authProvider = authProvider;
     }
@@ -37,7 +36,11 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated()
                 )
-                .authenticationProvider(authProvider);
+                .authenticationProvider(authProvider)
+                .exceptionHandling(e ->
+                e.authenticationEntryPoint((request, response, authException) -> {
+                    response.sendRedirect("/login"); // Redirect to login page
+                }));
              /*   .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll())
