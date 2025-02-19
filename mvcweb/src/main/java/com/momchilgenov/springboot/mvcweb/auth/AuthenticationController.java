@@ -1,7 +1,6 @@
-package com.momchilgenov.springboot.mvcweb.login;
+package com.momchilgenov.springboot.mvcweb.auth;
 
 import com.momchilgenov.springboot.mvcweb.entity.User;
-import com.momchilgenov.springboot.mvcweb.auth.JwtAuthenticationToken;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class LoginController {
+public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public LoginController(AuthenticationManager authenticationManager) {
+    public AuthenticationController(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
 
     }
