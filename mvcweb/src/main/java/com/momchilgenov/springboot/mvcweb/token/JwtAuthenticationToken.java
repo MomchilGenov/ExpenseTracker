@@ -1,4 +1,4 @@
-package com.momchilgenov.springboot.mvcweb.auth;
+package com.momchilgenov.springboot.mvcweb.token;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
