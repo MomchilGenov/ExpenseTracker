@@ -79,7 +79,9 @@ public class JwtUtil {
     }
 
     public List<GrantedAuthority> getRolesFromToken(String token) {
-        Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token).getBody();
         List<String> roles = claims.get("roles", List.class);
         if (roles == null) {
             return null;
