@@ -53,7 +53,9 @@ public class JwtUtil {
     }
 
     public String getUsernameFromToken(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token).getBody().getSubject();
     }
 
     public List<GrantedAuthority> getRolesFromToken(String token) {
