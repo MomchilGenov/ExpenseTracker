@@ -18,10 +18,13 @@ public class JwtUtil {
 
     private final String SECRET_KEY;
     private final String ISSUER;
+    private final String AUDIENCE;
 
-    public JwtUtil(@Value("${SECRET_KEY}") String SECRET_KEY, @Value("${ISSUER}") String ISSUER) {
+    public JwtUtil(@Value("${SECRET_KEY}") String SECRET_KEY, @Value("${ISSUER}") String ISSUER,
+                   @Value("${AUDIENCE}") String AUDIENCE) {
         this.SECRET_KEY = SECRET_KEY;
         this.ISSUER = ISSUER;
+        this.AUDIENCE = AUDIENCE;
     }
 
     public String extractJwtFromCookies(HttpServletRequest request) {
@@ -68,7 +71,12 @@ public class JwtUtil {
         return ISSUER.equals(issuer);
     }
 
-
+    public boolean validateAudience(String token) {
+        String audience = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token).getBody().getAudience();
+        return AUDIENCE.equals(audience);
+    }
 
     public List<GrantedAuthority> getRolesFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
