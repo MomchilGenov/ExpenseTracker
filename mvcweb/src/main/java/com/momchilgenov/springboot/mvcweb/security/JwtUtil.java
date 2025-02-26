@@ -17,9 +17,11 @@ import java.util.stream.Collectors;
 public class JwtUtil {
 
     private final String SECRET_KEY;
+    private final String ISSUER;
 
-    public JwtUtil(@Value("${SECRET_KEY}") String SECRET_KEY) {
+    public JwtUtil(@Value("${SECRET_KEY}") String SECRET_KEY, @Value("${ISSUER}") String ISSUER) {
         this.SECRET_KEY = SECRET_KEY;
+        this.ISSUER = ISSUER;
     }
 
     public String extractJwtFromCookies(HttpServletRequest request) {
@@ -42,6 +44,7 @@ public class JwtUtil {
         return null;
     }
 
+    //todo - call validate issuer and audience methods
     public boolean validateToken(String token) {
         try {
             Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);
@@ -56,6 +59,13 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
                 .build()
                 .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public boolean getIssuer(String token) {
+        String issuer = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token).getBody().getIssuer();
+        return ISSUER.equals(issuer);
     }
 
     public List<GrantedAuthority> getRolesFromToken(String token) {
