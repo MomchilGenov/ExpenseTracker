@@ -1,5 +1,6 @@
 package com.momchilgenov.springboot.mvcweb.security;
 
+import com.momchilgenov.springboot.mvcweb.exception.ExpiredJwtTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -38,22 +39,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
+        try {
+            if (jwt != null && jwtUtil.validateToken(jwt)) {
+                System.out.println("Received a jwt in filter");
+                String username = jwtUtil.getUsernameFromToken(jwt);
 
-        if (jwt != null) {//&& jwtUtil.validateToken(jwt)) {
-            System.out.println("received a jwt in filter");
-            String username = jwtUtil.getUsernameFromToken(jwt);
-
-            // Create an authentication token to access in custom authentication provider
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    username, null, jwtUtil.getRolesFromToken(jwt));
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                // Create an authentication token to access in custom authentication provider
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        username, null, jwtUtil.getRolesFromToken(jwt));
+                //populates the authentication object with more details from the request object
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtTokenException e) {
+            System.out.println("JWT is expired!");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Your session has expired!Please login again.");
+        } catch (Exception e) {
+            System.out.println("JWT is invalid!");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token!Please login again.");
         }
-        //System.out.println("Fake authenticated");
-        //SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("IvanTest", null, null));
-        filterChain.doFilter(request, response);
+
     }
 }
 
