@@ -61,12 +61,14 @@ public class JwtUtil {
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean getIssuer(String token) {
+    public boolean validateIssuer(String token) {
         String issuer = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
                 .build()
                 .parseClaimsJws(token).getBody().getIssuer();
         return ISSUER.equals(issuer);
     }
+
+
 
     public List<GrantedAuthority> getRolesFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token).getBody();
