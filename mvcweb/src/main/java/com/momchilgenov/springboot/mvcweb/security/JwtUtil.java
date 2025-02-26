@@ -1,6 +1,8 @@
 package com.momchilgenov.springboot.mvcweb.security;
 
+import com.momchilgenov.springboot.mvcweb.exception.ExpiredJwtTokenException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.security.SignatureException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,14 +50,18 @@ public class JwtUtil {
         return null;
     }
 
-    //todo - call validate issuer and audience methods
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws ExpiredJwtTokenException {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8)).parseClaimsJws(token);
-            return true;
+            //verifies signature,checks that token hasn't expired
+            //is properly formatted, is supported, is not null or empty
+            Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token);
+            return validateIssuer(token) && validateAudience(token);
+        } catch (ExpiredJwtException e) {
+            throw new ExpiredJwtTokenException("JWT has expired", e);
         } catch (Exception e) {
-            return true;
-            //return false;
+            throw new RuntimeException("Invalid JWT token", e);
         }
     }
 
