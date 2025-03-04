@@ -1,6 +1,7 @@
 package com.momchilgenov.springboot.mvcweb.auth;
 
 import com.momchilgenov.springboot.mvcweb.entity.User;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtTokenPair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -13,7 +14,7 @@ public class AuthenticationService {
         this.URL_OF_JWT_AUTHENTICATOR = URL_OF_JWT_AUTHENTICATOR;
     }
 
-    public String authenticateUser(String username, String password) {
+    public JwtTokenPair authenticateUser(String username, String password) {
         String str = "This is a trivial public message";
 
         System.out.println("in backendservice");
@@ -21,9 +22,9 @@ public class AuthenticationService {
 
         // Send the login credentials to the backend
         RestTemplate restTemplate = new RestTemplate();
-        String jwtToken = restTemplate.postForObject(URL_OF_JWT_AUTHENTICATOR, user, String.class);
+        JwtTokenPair jwtTokenPair = restTemplate.postForObject(URL_OF_JWT_AUTHENTICATOR, user, JwtTokenPair.class);
 
-        return jwtToken;
+        return jwtTokenPair;
     }
 
 }
