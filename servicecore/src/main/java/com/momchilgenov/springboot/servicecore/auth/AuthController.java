@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private AuthService authService;
+    private final AuthService authService;
 
     @Autowired
     public AuthController(AuthService authService) {
@@ -26,14 +26,8 @@ public class AuthController {
         String password = user.getPassword();
         System.out.println("Received username = " + username + " and password = " + password);
 
-        JwtAccessToken accessToken = new JwtAccessToken("Dummy access token"); //todo - implement generation with helper class
-        JwtRefreshToken refreshToken = new JwtRefreshToken("Dummy refresh token"); //todo - implement generation with helper class
-        JwtTokenPair jwtTokenPair = new JwtTokenPair(accessToken, refreshToken);
-        //TODO
-        /*
+        JwtTokenPair jwtTokenPair = authService.authenticateUser(user);
 
-        5. Develop jwt generation of the 2 tokens
-         */
         return ResponseEntity.ok(jwtTokenPair);
     }
 }
