@@ -1,6 +1,7 @@
 package com.momchilgenov.springboot.mvcweb.auth;
 
 import com.momchilgenov.springboot.mvcweb.entity.User;
+import com.momchilgenov.springboot.mvcweb.token.JwtAuthenticationToken;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +39,8 @@ public class AuthenticationController {
         System.out.println("in login POST method");
         //todo - check if user is authenticated, if is authenticated - redirect to homepage(could enter url in search bar)
         //test purposes jwt
-        String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.UJpLFJc3GLacvl2Y5v0k1NNkcJxUBMBL0_wqBaJoJ9I";
+        String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJdmFuIEl2YW5vdiIsImV4cCI6MTc5MDc4NzIwMCwiaXNzIjoic2VydmljZWNvcmUiLCJhdWQiOiJtdmN3ZWIiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0.4Ju3e1gxcXxf0ZxKtA0tWwI9ff0Tj8shWagFGer22Ig";
         try {
-            Cookie cookie = new Cookie("jwt", jwt);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
             /*
              * calls the only available authentication provider - that
              * is my custom authentication provider that sends credentials to AuthenticationService
@@ -52,7 +49,14 @@ public class AuthenticationController {
             //should also call backend service to receive the jwt and store it
             JwtAuthenticationToken authentication =
                     (JwtAuthenticationToken) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            System.out.println("Backend returned jwt: " + authentication.getJWT());
+            System.out.println("Backend returned access token = " + authentication.getTokenPair().accessToken().token());
+            System.out.println("Backend returned refresh token = " + authentication.getTokenPair().refreshToken().token());
+
+            Cookie cookie = new Cookie("jwt", jwt);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+
 
         } catch (AuthenticationException e) {
             System.out.println("Did not work");
