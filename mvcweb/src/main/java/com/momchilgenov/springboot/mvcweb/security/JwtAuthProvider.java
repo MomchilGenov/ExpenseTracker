@@ -1,8 +1,8 @@
 package com.momchilgenov.springboot.mvcweb.security;
 
 import com.momchilgenov.springboot.mvcweb.auth.AuthenticationService;
-import com.momchilgenov.springboot.mvcweb.auth.JwtAuthenticationToken;
-import com.momchilgenov.springboot.mvcweb.security.JwtUtil;
+import com.momchilgenov.springboot.mvcweb.token.JwtAuthenticationToken;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtTokenPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,14 +30,14 @@ public class JwtAuthProvider implements AuthenticationProvider {
 
         System.out.println("My custom authentication provider received username=" + username + " and password=" + password);
         // Send credentials to backend service to validate and generate JWT
-        String jwtToken = authenticationService.authenticateUser(username, password);
+        JwtTokenPair jwtTokenPair = authenticationService.authenticateUser(username, password);
         //authentication.setAuthenticated(true);
 
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         //fixme (authorities)
-        return new JwtAuthenticationToken(username, null, null, jwtToken);
+        return new JwtAuthenticationToken(username, null, null, jwtTokenPair);
         /*
         if (jwtToken != null && jwtUtil.validateToken(jwtToken)) {
             // On successful authentication, you can return an Authentication token
