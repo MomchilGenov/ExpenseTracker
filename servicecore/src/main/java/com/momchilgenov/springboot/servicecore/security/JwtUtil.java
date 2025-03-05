@@ -2,6 +2,7 @@ package com.momchilgenov.springboot.servicecore.security;
 
 import com.momchilgenov.springboot.servicecore.User;
 import com.momchilgenov.springboot.servicecore.token.JwtAccessToken;
+import com.momchilgenov.springboot.servicecore.token.JwtRefreshToken;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -21,13 +22,17 @@ public class JwtUtil {
     private final String AUDIENCE;
     private final int ACCESS_TOKEN_DURATION_IN_MINUTES;
 
+    private final int REFRESH_TOKEN_DURATION_IN_MINUTES;
+
     public JwtUtil(@Value("${SECRET_KEY}") String SECRET_KEY, @Value("${ISSUER}") String ISSUER,
                    @Value("${AUDIENCE}") String AUDIENCE,
-                   @Value("${ACCESS_TOKEN_DURATION_IN_MINUTES}") int ACCESS_TOKEN_DURATION_IN_MINUTES) {
+                   @Value("${ACCESS_TOKEN_DURATION_IN_MINUTES}") int ACCESS_TOKEN_DURATION_IN_MINUTES,
+                   @Value("${REFRESH_TOKEN_DURATION_IN_MINUTES}") int REFRESH_TOKEN_DURATION_IN_MINUTES) {
         this.SECRET_KEY = SECRET_KEY;
         this.ISSUER = ISSUER;
         this.AUDIENCE = AUDIENCE;
         this.ACCESS_TOKEN_DURATION_IN_MINUTES = ACCESS_TOKEN_DURATION_IN_MINUTES;
+        this.REFRESH_TOKEN_DURATION_IN_MINUTES = REFRESH_TOKEN_DURATION_IN_MINUTES;
     }
 
     public JwtAccessToken generateJwtAccessToken(User user) {
@@ -43,6 +48,27 @@ public class JwtUtil {
                         .setIssuedAt(new Date())
                         .setSubject(user.getUsername())
                         .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * ACCESS_TOKEN_DURATION_IN_MINUTES))
+                        .signWith(key, SignatureAlgorithm.HS256)
+                        .addClaims(claims)
+                        .compact()
+        );
+    }
+
+    public JwtRefreshToken generateJwtRefreshToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+
+        //jti and token_type = refresh
+        claims.put("refresh_token", true);
+        String jti = JtiGenerator.generateJti();
+        claims.put("jti", jti);
+        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+        return new JwtRefreshToken(
+                Jwts.builder()
+                        .setAudience(AUDIENCE)
+                        .setIssuer(ISSUER)
+                        .setIssuedAt(new Date())
+                        .setSubject(user.getUsername())
+                        .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * REFRESH_TOKEN_DURATION_IN_MINUTES))
                         .signWith(key, SignatureAlgorithm.HS256)
                         .addClaims(claims)
                         .compact()
