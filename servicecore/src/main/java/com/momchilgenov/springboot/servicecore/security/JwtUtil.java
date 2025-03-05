@@ -1,10 +1,51 @@
 package com.momchilgenov.springboot.servicecore.security;
 
+import com.momchilgenov.springboot.servicecore.User;
+import com.momchilgenov.springboot.servicecore.token.JwtAccessToken;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 //generates jwt tokens
 @Component
 public class JwtUtil {
+    private final String SECRET_KEY;
+    private final String ISSUER;
+    private final String AUDIENCE;
+    private final int ACCESS_TOKEN_DURATION_IN_MINUTES;
 
+    public JwtUtil(@Value("${SECRET_KEY}") String SECRET_KEY, @Value("${ISSUER}") String ISSUER,
+                   @Value("${AUDIENCE}") String AUDIENCE,
+                   @Value("${ACCESS_TOKEN_DURATION_IN_MINUTES}") int ACCESS_TOKEN_DURATION_IN_MINUTES) {
+        this.SECRET_KEY = SECRET_KEY;
+        this.ISSUER = ISSUER;
+        this.AUDIENCE = AUDIENCE;
+        this.ACCESS_TOKEN_DURATION_IN_MINUTES = ACCESS_TOKEN_DURATION_IN_MINUTES;
+    }
 
+    public JwtAccessToken generateJwtAccessToken(User user) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", user.getRoles());
+        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
+        return new JwtAccessToken(
+                Jwts.builder()
+                        .setAudience(AUDIENCE)
+                        .setIssuer(ISSUER)
+                        .setIssuedAt(new Date())
+                        .setSubject(user.getUsername())
+                        .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * ACCESS_TOKEN_DURATION_IN_MINUTES))
+                        .signWith(key, SignatureAlgorithm.HS256)
+                        .addClaims(claims)
+                        .compact()
+        );
+    }
 }
