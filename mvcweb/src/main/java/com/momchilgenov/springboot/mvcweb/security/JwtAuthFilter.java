@@ -30,16 +30,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         System.out.println("in JwtAuthFilter");
-        String jwt = jwtUtil.extractJwtFromAuthorizationHeader(request);
-        if (jwt == null) {
-            System.out.println("No jwt in authorization header");
-            jwt = jwtUtil.extractJwtFromCookies(request);
-            if (jwt == null) {
-                System.out.println("Neither in cookies");
-            }
-        }
-
+        String jwt = jwtUtil.extractJwt(request);
         try {
+            //todo instead of validating it here, you should call and api to the servicecore to
+            //validate it just like for login and if it the response says it's valid proceed as now
+            //otherwise initiate refresh mechanism if refreshtoken available, if not, request login
             if (jwt != null && jwtUtil.validateToken(jwt)) {
                 System.out.println("Received a jwt in filter");
                 String username = jwtUtil.getUsernameFromToken(jwt);
@@ -53,11 +48,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtTokenException e) {
+            //todo - place here refresh token logic, if it fails then go to next catch statement
             System.out.println("JWT is expired!");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Your session has expired!Please login again.");
         } catch (Exception e) {
             System.out.println("JWT is invalid!");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token!Please login again.");
+            throw new RuntimeException("this is the problem", e);
+
         }
 
     }
