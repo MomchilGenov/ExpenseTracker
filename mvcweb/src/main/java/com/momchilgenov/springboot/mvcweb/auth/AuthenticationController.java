@@ -57,11 +57,17 @@ public class AuthenticationController {
             System.out.println("From controller - current authenticated user is " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
             System.out.println("Backend returned access token = " + authentication.getTokenPair().accessToken().token());
             System.out.println("Backend returned refresh token = " + authentication.getTokenPair().refreshToken().token());
-            
-            Cookie cookie = new Cookie("accessToken", accessToken.token());
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
+
+            Cookie accessTokenCookie = new Cookie("accessToken", accessToken.token());
+            accessTokenCookie.setHttpOnly(true);
+            accessTokenCookie.setPath("/");
+            response.addCookie(accessTokenCookie);
+
+            Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.token());
+            refreshTokenCookie.setHttpOnly(true);
+            refreshTokenCookie.setPath("/");
+            response.addCookie(refreshTokenCookie);
+
 
 
         } catch (AuthenticationException e) {
