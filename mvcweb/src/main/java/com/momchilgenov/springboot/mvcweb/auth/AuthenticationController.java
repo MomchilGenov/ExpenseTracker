@@ -2,6 +2,8 @@ package com.momchilgenov.springboot.mvcweb.auth;
 
 import com.momchilgenov.springboot.mvcweb.entity.User;
 import com.momchilgenov.springboot.mvcweb.token.JwtAuthenticationToken;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessToken;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtRefreshToken;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +40,6 @@ public class AuthenticationController {
     public String login(@ModelAttribute("user") User user, HttpServletResponse response) {
         System.out.println("in login POST method");
         //todo - check if user is authenticated, if is authenticated - redirect to homepage(could enter url in search bar)
-        //test purposes jwt
-        String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJdmFuIEl2YW5vdiIsImV4cCI6MTc5MDc4NzIwMCwiaXNzIjoic2VydmljZWNvcmUiLCJhdWQiOiJtdmN3ZWIiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0.4Ju3e1gxcXxf0ZxKtA0tWwI9ff0Tj8shWagFGer22Ig";
         try {
             /*
              * calls the only available authentication provider(JwtAuthProvider)
@@ -50,10 +50,15 @@ public class AuthenticationController {
             if (authentication != null) {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+            //todo - handle null cases and return an error on login form (bad credentials)
+            JwtAccessToken accessToken = authentication.getTokenPair().accessToken();
+            JwtRefreshToken refreshToken = authentication.getTokenPair().refreshToken();
+
+            System.out.println("From controller - current authenticated user is " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
             System.out.println("Backend returned access token = " + authentication.getTokenPair().accessToken().token());
             System.out.println("Backend returned refresh token = " + authentication.getTokenPair().refreshToken().token());
-
-            Cookie cookie = new Cookie("jwt", jwt);
+            
+            Cookie cookie = new Cookie("accessToken", accessToken.token());
             cookie.setHttpOnly(true);
             cookie.setPath("/");
             response.addCookie(cookie);
