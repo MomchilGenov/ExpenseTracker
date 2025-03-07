@@ -31,6 +31,16 @@ public class JwtUtil {
         this.AUDIENCE = AUDIENCE;
     }
 
+    public String extractJwt(HttpServletRequest request) {
+        String jwt;
+        jwt = extractJwtFromCookies(request);
+        if (jwt != null) {
+            return jwt;
+        }
+        jwt = extractJwtFromAuthorizationHeader(request);
+        return jwt;
+    }
+
     public String extractJwtFromCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies(); // Get all cookies from the request
         if (cookies != null) {
