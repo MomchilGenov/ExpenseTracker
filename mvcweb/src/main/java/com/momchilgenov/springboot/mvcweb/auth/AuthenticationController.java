@@ -42,13 +42,14 @@ public class AuthenticationController {
         String jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJJdmFuIEl2YW5vdiIsImV4cCI6MTc5MDc4NzIwMCwiaXNzIjoic2VydmljZWNvcmUiLCJhdWQiOiJtdmN3ZWIiLCJyb2xlcyI6WyJ1c2VyIiwiYWRtaW4iXX0.4Ju3e1gxcXxf0ZxKtA0tWwI9ff0Tj8shWagFGer22Ig";
         try {
             /*
-             * calls the only available authentication provider - that
-             * is my custom authentication provider that sends credentials to AuthenticationService
-             * that authenticates the user and returns a generated jwt or an error
+             * calls the only available authentication provider(JwtAuthProvider)
+             * that sends credentials to AuthenticationService
              * */
-            //should also call backend service to receive the jwt and store it
             JwtAuthenticationToken authentication =
                     (JwtAuthenticationToken) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+            if (authentication != null) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
             System.out.println("Backend returned access token = " + authentication.getTokenPair().accessToken().token());
             System.out.println("Backend returned refresh token = " + authentication.getTokenPair().refreshToken().token());
 
