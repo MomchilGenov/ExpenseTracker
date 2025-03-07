@@ -22,6 +22,7 @@ public class JwtUtil {
     private final String SECRET_KEY;
     private final String ISSUER;
     private final String AUDIENCE;
+    private final String JWT_ACCESS_TOKEN = "accessToken";
 
     public JwtUtil(@Value("${SECRET_KEY}") String SECRET_KEY, @Value("${ISSUER}") String ISSUER,
                    @Value("${AUDIENCE}") String AUDIENCE) {
@@ -34,7 +35,7 @@ public class JwtUtil {
         Cookie[] cookies = request.getCookies(); // Get all cookies from the request
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("jwt".equals(cookie.getName())) { // Check if the cookie name matches
+                if ("accessToken".equals(cookie.getName())) { // Check if the cookie name matches
                     return cookie.getValue(); // Return the JWT from the cookie
                 }
             }
