@@ -32,13 +32,12 @@ public class AuthController {
     }
 
     @PostMapping("/validateAccessToken")
-    public boolean validateAccessToken(){
-        //todo - check user exists, roles match, not revoked
-        return false;
+    public JwtAccessTokenStatus validateAccessToken(JwtAccessToken accessToken) {
+        return authService.validateAccessToken(accessToken);
     }
 
     @PostMapping("/validateRefreshToken")
-    public boolean validateRefreshToken(){
+    public boolean validateRefreshToken() {
         /*todo - check user exists, not revoked, refresh_token=true, audience, issuer, etc can be checked in mvcweb
            and iat is not BEFORE current timestamp for user, if it is, revoke token send fail
         */
@@ -46,13 +45,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public boolean register(){
+    public boolean register() {
         //todo - do last, after domain is clear
         return false;
     }
 
     @PostMapping("/logout")
-    public boolean logout(){
+    public boolean logout() {
         //todo - revoke all sent tokens,update timestamp
         return false;
     }
