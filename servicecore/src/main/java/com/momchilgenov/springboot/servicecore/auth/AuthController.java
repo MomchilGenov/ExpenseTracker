@@ -30,4 +30,30 @@ public class AuthController {
 
         return ResponseEntity.ok(jwtTokenPair);
     }
+
+    @PostMapping("/validateAccessToken")
+    public boolean validateAccessToken(){
+        //todo - check user exists, roles match, not revoked
+        return false;
+    }
+
+    @PostMapping("/validateRefreshToken")
+    public boolean validateRefreshToken(){
+        /*todo - check user exists, not revoked, refresh_token=true, audience, issuer, etc can be checked in mvcweb
+           and iat is not BEFORE current timestamp for user, if it is, revoke token send fail
+        */
+        return false;
+    }
+
+    @PostMapping("/register")
+    public boolean register(){
+        //todo - do last, after domain is clear
+        return false;
+    }
+
+    @PostMapping("/logout")
+    public boolean logout(){
+        //todo - revoke all sent tokens,update timestamp
+        return false;
+    }
 }
