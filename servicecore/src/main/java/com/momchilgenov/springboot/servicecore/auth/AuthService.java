@@ -37,4 +37,11 @@ public class AuthService {
         JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(userDto);
         return new JwtTokenPair(accessToken, refreshToken);
     }
+
+    //todo - replace dummy impl with real one
+    //todo - check user exists, roles match, not revoked
+    public JwtAccessTokenStatus validateAccessToken(JwtAccessToken token){
+        return new JwtAccessTokenStatus(JwtClaimValidationStatus.VALID,
+                JwtClaimValidationStatus.VALID, false, JwtClaimValidationStatus.EXISTS, true);
+    }
 }
