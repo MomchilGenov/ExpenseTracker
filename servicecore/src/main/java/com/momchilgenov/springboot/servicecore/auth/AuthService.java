@@ -40,8 +40,17 @@ public class AuthService {
 
     //todo - replace dummy impl with real one
     //todo - check user exists, roles match, not revoked
-    public JwtAccessTokenStatus validateAccessToken(JwtAccessToken token){
+    public JwtAccessTokenStatus validateAccessToken(JwtAccessToken token) {
         return new JwtAccessTokenStatus(JwtClaimValidationStatus.VALID,
                 JwtClaimValidationStatus.VALID, false, JwtClaimValidationStatus.EXISTS, true);
     }
+
+
+    /*todo - check user exists, not revoked, refresh_token=true, audience, issuer, etc
+           and iat is not BEFORE current timestamp for user, if it is, revoke token send null
+    */
+    public JwtTokenPair validateRefreshToken(JwtRefreshToken token) {
+        return null;
+    }
+
 }
