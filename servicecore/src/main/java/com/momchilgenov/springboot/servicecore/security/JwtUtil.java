@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -74,4 +75,20 @@ public class JwtUtil {
                         .compact()
         );
     }
+
+    public boolean validateIssuer(String token) {
+        String issuer = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token).getBody().getIssuer();
+        return ISSUER.equals(issuer);
+    }
+
+    public boolean validateAudience(String token) {
+        String audience = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token).getBody().getAudience();
+        return AUDIENCE.equals(audience);
+    }
+
+
 }
