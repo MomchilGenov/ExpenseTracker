@@ -37,11 +37,8 @@ public class AuthController {
     }
 
     @PostMapping("/validateRefreshToken")
-    public boolean validateRefreshToken() {
-        /*todo - check user exists, not revoked, refresh_token=true, audience, issuer, etc can be checked in mvcweb
-           and iat is not BEFORE current timestamp for user, if it is, revoke token send fail
-        */
-        return false;
+    public JwtTokenPair validateRefreshToken(JwtRefreshToken token) {
+        return authService.validateRefreshToken(token);
     }
 
     @PostMapping("/register")
