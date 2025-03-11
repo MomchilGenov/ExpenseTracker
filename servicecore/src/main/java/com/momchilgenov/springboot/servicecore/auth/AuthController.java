@@ -32,7 +32,8 @@ public class AuthController {
     }
 
     @PostMapping("/validateAccessToken")
-    public JwtAccessTokenStatus validateAccessToken(JwtAccessToken accessToken) {
+    public JwtAccessTokenStatus validateAccessToken(@RequestBody JwtAccessToken accessToken) {
+        System.out.println("In servicecore controller, received a token = " + accessToken.token());
         return authService.validateAccessToken(accessToken);
     }
 
