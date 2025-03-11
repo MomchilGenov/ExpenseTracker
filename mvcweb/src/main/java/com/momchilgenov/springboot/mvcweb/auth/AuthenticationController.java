@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class AuthenticationController {
 
+    private final AuthenticationService authenticationService;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthenticationController(AuthenticationManager authenticationManager) {
+    public AuthenticationController(AuthenticationManager authenticationManager, AuthenticationService authenticationService) {
         this.authenticationManager = authenticationManager;
+        this.authenticationService = authenticationService;
 
     }
 
@@ -67,7 +69,6 @@ public class AuthenticationController {
             refreshTokenCookie.setHttpOnly(true);
             refreshTokenCookie.setPath("/");
             response.addCookie(refreshTokenCookie);
-
 
 
         } catch (AuthenticationException e) {
