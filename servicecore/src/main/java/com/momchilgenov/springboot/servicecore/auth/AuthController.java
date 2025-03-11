@@ -38,7 +38,7 @@ public class AuthController {
     }
 
     @PostMapping("/validateRefreshToken")
-    public JwtTokenPair validateRefreshToken(JwtRefreshToken token) {
+    public JwtTokenPair validateRefreshToken(@RequestBody JwtRefreshToken token) {
         return authService.validateRefreshToken(token);
     }
 
