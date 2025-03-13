@@ -36,8 +36,10 @@ public class JwtUtil {
     private boolean isIssuerValid(JwtAccessTokenStatus tokenStatus) {
         return tokenStatus.iss().equals(JwtClaimValidationStatus.VALID);
     }
-    
 
+    private boolean isAudienceValid(JwtAccessTokenStatus tokenStatus) {
+        return tokenStatus.aud().equals(JwtClaimValidationStatus.VALID);
+    }
 
     public String extractJwt(HttpServletRequest request) {
         String jwt;
