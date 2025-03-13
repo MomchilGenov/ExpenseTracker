@@ -5,10 +5,10 @@ import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessToken;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessTokenStatus;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtTokenPair;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Configuration
+@Service
 public class AuthenticationService {
     private final String URL_OF_JWT_AUTHENTICATOR;
     private final String URL_OF_JWT_ACCESS_TOKEN_VALIDATION;
