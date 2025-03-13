@@ -53,6 +53,12 @@ public class JwtUtil {
         return tokenStatus.sub_roles_match();
     }
 
+    public boolean isValid(JwtAccessTokenStatus tokenStatus) {
+        return isAudienceValid(tokenStatus) && isIssuerValid(tokenStatus)
+                && isSubjectValid(tokenStatus) && areRolesValid(tokenStatus);
+    }
+
+
     public String extractJwt(HttpServletRequest request) {
         String jwt;
         jwt = extractJwtFromCookies(request);
