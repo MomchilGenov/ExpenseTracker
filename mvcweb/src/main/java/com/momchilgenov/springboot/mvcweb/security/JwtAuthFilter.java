@@ -2,6 +2,8 @@ package com.momchilgenov.springboot.mvcweb.security;
 
 import com.momchilgenov.springboot.mvcweb.auth.AuthenticationService;
 import com.momchilgenov.springboot.mvcweb.exception.ExpiredJwtTokenException;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessToken;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessTokenStatus;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -37,25 +39,29 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         System.out.println("in JwtAuthFilter");
         String jwt = jwtUtil.extractJwt(request);
         try {
-            //todo instead of validating it here, you should call and api to the servicecore to
-            //validate it just like for login and if it the response says it's valid proceed as now
-            //otherwise initiate refresh mechanism if refreshtoken available, if not, request login
-            if (jwt != null && jwtUtil.validateToken(jwt)) {
-                System.out.println("Received a jwt in filter");
-                String username = jwtUtil.getUsernameFromToken(jwt);
+            if (jwt != null) {
+                JwtAccessTokenStatus tokenStatus = authenticationService.validateAccessToken(new JwtAccessToken(jwt));
+                if (jwtUtil.isValid(tokenStatus)) {
+                    if (!jwtUtil.isExpired(tokenStatus)) {
+                        //valid and not expired, call upper code
 
-                // Create an authentication token to access in custom authentication provider
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        username, null, jwtUtil.getRolesFromToken(jwt));
-                //populates the authentication object with more details from the request object
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                        System.out.println("Received a jwt in filter");
+                        String username = jwtUtil.getUsernameFromToken(jwt);
+
+                        // Create an authentication token to access in custom authentication provider
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                                username, null, jwtUtil.getRolesFromToken(jwt));
+                        //populates the authentication object with more details from the request object
+                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    } else {
+                        System.out.println("Token is valid, but expired, attempting a refresh");
+                    }
+                }else{
+                    System.out.println("No valid tokens found.");
+                }
             }
             filterChain.doFilter(request, response);
-        } catch (ExpiredJwtTokenException e) {
-            //todo - place here refresh token logic, if it fails then go to next catch statement
-            System.out.println("JWT is expired!");
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Your session has expired!Please login again.");
         } catch (Exception e) {
             System.out.println("JWT is invalid!");
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token!Please login again.");
