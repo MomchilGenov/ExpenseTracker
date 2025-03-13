@@ -41,6 +41,10 @@ public class JwtUtil {
         return tokenStatus.aud().equals(JwtClaimValidationStatus.VALID);
     }
 
+    private boolean isExpired(JwtAccessTokenStatus tokenStatus){
+        return tokenStatus.exp();
+    }
+
     public String extractJwt(HttpServletRequest request) {
         String jwt;
         jwt = extractJwtFromCookies(request);
