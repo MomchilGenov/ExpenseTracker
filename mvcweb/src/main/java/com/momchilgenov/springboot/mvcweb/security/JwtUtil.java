@@ -45,10 +45,13 @@ public class JwtUtil {
         return tokenStatus.exp();
     }
 
-    private boolean isSubjectValid(JwtAccessTokenStatus tokenStatus){
+    private boolean isSubjectValid(JwtAccessTokenStatus tokenStatus) {
         return tokenStatus.sub().equals(JwtClaimValidationStatus.EXISTS);
     }
 
+    private boolean areRolesValid(JwtAccessTokenStatus tokenStatus) {
+        return tokenStatus.sub_roles_match();
+    }
 
     public String extractJwt(HttpServletRequest request) {
         String jwt;
