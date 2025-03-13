@@ -1,5 +1,6 @@
 package com.momchilgenov.springboot.mvcweb.security;
 
+import com.momchilgenov.springboot.mvcweb.auth.AuthenticationService;
 import com.momchilgenov.springboot.mvcweb.exception.ExpiredJwtTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,10 +22,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
+    private final AuthenticationService authenticationService;
+
     @Autowired
-    public JwtAuthFilter(JwtUtil util) {
+    public JwtAuthFilter(JwtUtil util, AuthenticationService service) {
         this.jwtUtil = util;
+        this.authenticationService = service;
     }
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
