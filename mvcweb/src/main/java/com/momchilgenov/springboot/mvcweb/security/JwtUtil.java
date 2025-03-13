@@ -1,6 +1,8 @@
 package com.momchilgenov.springboot.mvcweb.security;
 
 import com.momchilgenov.springboot.mvcweb.exception.ExpiredJwtTokenException;
+import com.momchilgenov.springboot.mvcweb.token.JwtClaimValidationStatus;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessTokenStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -30,6 +32,12 @@ public class JwtUtil {
         this.ISSUER = ISSUER;
         this.AUDIENCE = AUDIENCE;
     }
+
+    private boolean isIssuerValid(JwtAccessTokenStatus tokenStatus) {
+        return tokenStatus.iss().equals(JwtClaimValidationStatus.VALID);
+    }
+    
+
 
     public String extractJwt(HttpServletRequest request) {
         String jwt;
