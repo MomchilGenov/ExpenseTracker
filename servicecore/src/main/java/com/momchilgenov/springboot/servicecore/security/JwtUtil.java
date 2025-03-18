@@ -3,19 +3,20 @@ package com.momchilgenov.springboot.servicecore.security;
 import com.momchilgenov.springboot.servicecore.User;
 import com.momchilgenov.springboot.servicecore.token.JwtAccessToken;
 import com.momchilgenov.springboot.servicecore.token.JwtRefreshToken;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 //generates jwt tokens
 @Component
@@ -112,6 +113,17 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
                 .build()
                 .parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public List<GrantedAuthority> getRolesFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token).getBody();
+        List<String> roles = claims.get("roles", List.class);
+        if (roles == null) {
+            return null;
+        }
+        return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
 }
