@@ -115,15 +115,11 @@ public class JwtUtil {
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
-    public List<GrantedAuthority> getRolesFromToken(String token) {
+    public List<String> getRolesFromToken(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
                 .build()
                 .parseClaimsJws(token).getBody();
-        List<String> roles = claims.get("roles", List.class);
-        if (roles == null) {
-            return null;
-        }
-        return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        return claims.get("roles", List.class);
     }
 
 }
