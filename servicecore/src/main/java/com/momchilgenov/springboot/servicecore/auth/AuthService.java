@@ -8,6 +8,8 @@ import com.momchilgenov.springboot.servicecore.token.JwtTokenPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class AuthService {
@@ -38,11 +40,38 @@ public class AuthService {
         return new JwtTokenPair(accessToken, refreshToken);
     }
 
-    //todo - replace dummy impl with real one
-    //todo - check user exists, roles match, not revoked
     public JwtAccessTokenStatus validateAccessToken(JwtAccessToken token) {
-        return new JwtAccessTokenStatus(JwtClaimValidationStatus.VALID,
-                JwtClaimValidationStatus.VALID, false, JwtClaimValidationStatus.EXISTS, true);
+        JwtClaimValidationStatus issuer;
+        JwtClaimValidationStatus audience;
+        JwtClaimValidationStatus subject;
+        JwtClaimValidationStatus subject_matches_roles;
+        boolean isExpired;
+        String accessToken = token.token();
+        if (jwtUtil.validateIssuer(accessToken)) {
+            issuer = JwtClaimValidationStatus.VALID;
+        } else {
+            issuer = JwtClaimValidationStatus.INVALID;
+        }
+
+        if (jwtUtil.validateAudience(accessToken)) {
+            audience = JwtClaimValidationStatus.VALID;
+        } else {
+            audience = JwtClaimValidationStatus.INVALID;
+        }
+        isExpired = jwtUtil.isExpired(token.token());
+
+        String username = jwtUtil.getUsernameFromToken(accessToken);
+        List<String> roles = jwtUtil.getRolesFromToken(accessToken);
+
+        var statusDto = authRepository.validateSubjectExistsAndRolesMatch(username, roles);
+        JwtClaimValidationStatus subjectStatus;
+        if (statusDto.sub() == null) {
+            subjectStatus = JwtClaimValidationStatus.NOT_FOUND;
+        } else {
+            subjectStatus = statusDto.sub();
+        }
+
+        return new JwtAccessTokenStatus(issuer, audience, isExpired, subjectStatus, statusDto.sub_roles_match());
     }
 
 
