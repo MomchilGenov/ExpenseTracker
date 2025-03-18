@@ -3,12 +3,9 @@ package com.momchilgenov.springboot.servicecore.security;
 import com.momchilgenov.springboot.servicecore.User;
 import com.momchilgenov.springboot.servicecore.token.JwtAccessToken;
 import com.momchilgenov.springboot.servicecore.token.JwtRefreshToken;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -80,10 +77,19 @@ public class JwtUtil {
     }
 
     public boolean validateIssuer(String token) {
-        String issuer = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-                .build()
-                .parseClaimsJws(token).getBody().getIssuer();
-        return ISSUER.equals(issuer);
+        try {
+            String issuer = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token).getBody().getIssuer();
+            return ISSUER.equals(issuer);
+        } catch (ExpiredJwtException e) {
+            return ISSUER.equals(e.getClaims().getIssuer());
+        } catch (MalformedJwtException | SignatureException e) {
+            System.out.println("Malformed token or invalid signature");
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred in validating issuer", e);
+        }
     }
 
     public boolean validateAudience(String token) {
