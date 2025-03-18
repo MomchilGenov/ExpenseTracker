@@ -3,6 +3,8 @@ package com.momchilgenov.springboot.servicecore.security;
 import com.momchilgenov.springboot.servicecore.User;
 import com.momchilgenov.springboot.servicecore.token.JwtAccessToken;
 import com.momchilgenov.springboot.servicecore.token.JwtRefreshToken;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -90,5 +92,20 @@ public class JwtUtil {
         return AUDIENCE.equals(audience);
     }
 
+    public boolean isExpired(String token) {
+
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token);  // This will throw if expired
+            return false; // Token is valid
+        } catch (ExpiredJwtException e) {
+            return true; // Token is expired
+        } catch (JwtException e) {
+            // Handles other types of JWT exceptions (signature invalid, malformed token)
+            return true; // Treat it as expired or invalid
+        }
+    }
 
 }
