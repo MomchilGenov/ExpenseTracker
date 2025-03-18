@@ -141,10 +141,21 @@ public class JwtUtil {
     }
 
     public List<String> getRolesFromToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-                .build()
-                .parseClaimsJws(token).getBody();
-        return claims.get("roles", List.class);
+
+        try {
+            var claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token).getBody();
+            return claims.get("roles", List.class);
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().get("roles", List.class);
+        } catch (MalformedJwtException | SignatureException e) {
+            System.out.println("Malformed token or invalid signature");
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred in extracting subject", e);
+        }
+
     }
 
 }
