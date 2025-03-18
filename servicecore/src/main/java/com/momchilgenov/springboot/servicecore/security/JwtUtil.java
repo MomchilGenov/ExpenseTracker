@@ -108,4 +108,10 @@ public class JwtUtil {
         }
     }
 
+    public String getUsernameFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token).getBody().getSubject();
+    }
+
 }
