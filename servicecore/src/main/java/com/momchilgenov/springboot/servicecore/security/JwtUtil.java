@@ -93,10 +93,19 @@ public class JwtUtil {
     }
 
     public boolean validateAudience(String token) {
-        String audience = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-                .build()
-                .parseClaimsJws(token).getBody().getAudience();
-        return AUDIENCE.equals(audience);
+        try {
+            String audience = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token).getBody().getAudience();
+            return AUDIENCE.equals(audience);
+        } catch (ExpiredJwtException e) {
+            return AUDIENCE.equals(e.getClaims().getAudience());
+        } catch (MalformedJwtException | SignatureException e) {
+            System.out.println("Malformed token or invalid signature");
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred in validating audience", e);
+        }
     }
 
     public boolean isExpired(String token) {
