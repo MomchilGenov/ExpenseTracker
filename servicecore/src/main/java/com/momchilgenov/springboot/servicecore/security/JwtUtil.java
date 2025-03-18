@@ -125,9 +125,19 @@ public class JwtUtil {
     }
 
     public String getUsernameFromToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
-                .build()
-                .parseClaimsJws(token).getBody().getSubject();
+
+        try {
+            return Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token).getBody().getSubject();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject();
+        } catch (MalformedJwtException | SignatureException e) {
+            System.out.println("Malformed token or invalid signature");
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred in extracting subject", e);
+        }
     }
 
     public List<String> getRolesFromToken(String token) {
