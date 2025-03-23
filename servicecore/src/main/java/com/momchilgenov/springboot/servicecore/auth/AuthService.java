@@ -79,7 +79,14 @@ public class AuthService {
            and iat is not BEFORE current timestamp for user, if it is, revoke token send null
     */
     public JwtTokenPair validateRefreshToken(JwtRefreshToken token) {
-        return null;
+        //todo - (for token repo revocation logic) - save the token/jti in the repo upon creation/logout to keep track of revoked
+        //and blacklisted tokens
+        //todo keep track of last issued token timestamp to blacklist refresh tokens
+        String username = jwtUtil.getUsernameFromToken(token.token());
+        User userDto = authRepository.findUserByUsername(username);
+        JwtAccessToken accessToken = jwtUtil.generateJwtAccessToken(userDto);
+        JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(userDto);
+        return new JwtTokenPair(accessToken, refreshToken);
     }
 
 }
