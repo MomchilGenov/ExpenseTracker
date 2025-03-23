@@ -81,6 +81,18 @@ public class JwtUtil {
         return null; // Return null if no cookie is found
     }
 
+    public String extractJwtRefreshTokenFromCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies(); // Get all cookies from the request
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) { // Check if the cookie name matches
+                    return cookie.getValue(); // Return the JWT from the cookie
+                }
+            }
+        }
+        return null; // Return null if no cookie is found
+    }
+
     public String extractJwtFromAuthorizationHeader(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
