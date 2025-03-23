@@ -16,7 +16,7 @@ public class AuthRepository {
         //can replace with a dummy in memory db for more users and role testing.
         //todo - check for user in a db, if not present, return null, this is directly linked with
         //JwtAuthProvider return statement and placing the same username that was received.
-
+        //todo - see same problems for findUserByUsername()
         List<String> dummyRoles = new ArrayList<>();
         dummyRoles.add("ROLE_USER");
         dummyRoles.add("ROLE_ADMIN");
@@ -28,5 +28,11 @@ public class AuthRepository {
         return new JwtAccessTokenStatus(null, null, false, JwtClaimValidationStatus.EXISTS, true);
     }
 
+    public User findUserByUsername(String username) {
+        List<String> dummyRoles = new ArrayList<>();
+        dummyRoles.add("ROLE_USER");
+        dummyRoles.add("ROLE_ADMIN");
+        return new User("Ivan Samuilov", null, dummyRoles);
+    }
 
 }
