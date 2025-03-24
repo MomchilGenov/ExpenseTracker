@@ -4,6 +4,8 @@ import com.momchilgenov.springboot.mvcweb.auth.AuthenticationService;
 import com.momchilgenov.springboot.mvcweb.exception.ExpiredJwtTokenException;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessToken;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessTokenStatus;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtRefreshToken;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtTokenPair;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -56,8 +58,43 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     } else {
                         System.out.println("Token is valid, but expired, attempting a refresh");
+                        String refreshToken = jwtUtil.extractJwtRefreshTokenFromCookies(request);
+                        if (refreshToken == null) {
+                            System.out.println("No refresh token found in cookies.");
+                        } else {
+                            System.out.println("In filter, found a refresh token = " + refreshToken);
+                            //if token is invalid or expired, returns null
+                            JwtTokenPair tokenPair = authenticationService.validateRefreshToken(
+                                    new JwtRefreshToken(refreshToken));
+                            if (tokenPair == null) {
+                                System.out.println("Refresh token either expired or invalid");
+                            } else {
+                                String username = jwtUtil.getUsernameFromToken(tokenPair.accessToken().token());
+
+                                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                                        username, null, jwtUtil.getRolesFromToken(tokenPair.accessToken().token()));
+
+                                //populates the authentication object with more details from the request object
+                                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                                Cookie accessTokenCookie = new Cookie("accessToken", tokenPair.accessToken().token());
+                                accessTokenCookie.setHttpOnly(true);
+                                accessTokenCookie.setPath("/");
+                                response.addCookie(accessTokenCookie);
+
+                                Cookie refreshTokenCookie = new Cookie("refreshToken", tokenPair.refreshToken().token());
+                                refreshTokenCookie.setHttpOnly(true);
+                                refreshTokenCookie.setPath("/");
+                                response.addCookie(refreshTokenCookie);
+                            }
+                        }
                     }
-                }else{
+                } else {
+                    /*
+                     * we don't check for refresh tokens on the assumption that an invalid access token is
+                     * a malicious entity attempting unauthorized access
+                     */
                     System.out.println("No valid tokens found.");
                 }
             }
