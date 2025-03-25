@@ -55,6 +55,40 @@ public class JwtUtil {
         );
     }
 
+    public JwtRefreshToken generateJwtRefreshToken(String token) {
+
+        Claims claims;
+        String username;
+        try {
+            claims = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token).getBody();
+
+            username = claims.getSubject();
+            Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
+            return new JwtRefreshToken(
+                    Jwts.builder()
+                            .setAudience(AUDIENCE)
+                            .setIssuer(ISSUER)
+                            .setIssuedAt(new Date())
+                            .setSubject(username)
+                            .setExpiration(claims.getExpiration())
+                            .signWith(key, SignatureAlgorithm.HS256)
+                            .addClaims(claims)
+                            .compact()
+            );
+
+        } catch (ExpiredJwtException e) {
+            return null;
+
+        } catch (Exception e) {
+            System.out.println("Could not refresh token in generateJwtRefreshToken method.");
+            return null;
+        }
+
+    }
+
     public JwtRefreshToken generateJwtRefreshToken(User user) {
         Map<String, Object> claims = new HashMap<>();
 
