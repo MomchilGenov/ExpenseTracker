@@ -81,18 +81,17 @@ public class AuthService {
         String username = jwtUtil.getUsernameFromToken(token.token());
         //todo - check roles match, validate token(refresh_token=true, audience, issuer)
         User userDto = authRepository.findUserByUsername(username);
-
-
+        Date iatClaim = jwtUtil.getIssuedAt(token.token());
+        if (tokenService.isRevoked(username, iatClaim)) {
+            return null;
+        }
+        tokenService.revokeAll(username);
         JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(token.token());
         //null if expired
         if (refreshToken == null) {
             return null;
         }
         JwtAccessToken accessToken = jwtUtil.generateJwtAccessToken(userDto);
-        Date iatClaim = jwtUtil.getIssuedAt(token.token());
-        if (tokenService.isRevoked(username, iatClaim)) {
-            return null;
-        }
 
         return new JwtTokenPair(accessToken, refreshToken);
     }
