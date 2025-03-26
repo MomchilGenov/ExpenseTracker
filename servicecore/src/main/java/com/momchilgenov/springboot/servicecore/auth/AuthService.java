@@ -43,8 +43,6 @@ public class AuthService {
     public JwtAccessTokenStatus validateAccessToken(JwtAccessToken token) {
         JwtClaimValidationStatus issuer;
         JwtClaimValidationStatus audience;
-        JwtClaimValidationStatus subject;
-        JwtClaimValidationStatus subject_matches_roles;
         boolean isExpired;
         String accessToken = token.token();
         if (jwtUtil.validateIssuer(accessToken)) {
