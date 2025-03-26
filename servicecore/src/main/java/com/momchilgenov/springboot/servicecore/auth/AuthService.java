@@ -15,12 +15,14 @@ import java.util.List;
 public class AuthService {
 
     private final AuthRepository authRepository;
+    private final TokenService tokenService;
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public AuthService(AuthRepository authRepository, JwtUtil jwtUtil) {
+    public AuthService(AuthRepository authRepository, JwtUtil jwtUtil, TokenService tokenService) {
         this.authRepository = authRepository;
         this.jwtUtil = jwtUtil;
+        this.tokenService = tokenService;
     }
 
     public JwtTokenPair authenticateUser(User user) {
