@@ -45,6 +45,12 @@ public class AuthService {
         JwtClaimValidationStatus audience;
         boolean isExpired;
         String accessToken = token.token();
+        String username = jwtUtil.getUsernameFromToken(accessToken);
+        Date iatClaim = jwtUtil.getIssuedAt(accessToken);
+        if (tokenService.isRevoked(username, iatClaim)) {
+            return null;
+        }
+
         if (jwtUtil.validateIssuer(accessToken)) {
             issuer = JwtClaimValidationStatus.VALID;
         } else {
@@ -58,7 +64,6 @@ public class AuthService {
         }
         isExpired = jwtUtil.isExpired(token.token());
 
-        String username = jwtUtil.getUsernameFromToken(accessToken);
         List<String> roles = jwtUtil.getRolesFromToken(accessToken);
 
         var statusDto = authRepository.validateSubjectExistsAndRolesMatch(username, roles);
