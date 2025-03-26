@@ -8,6 +8,7 @@ import com.momchilgenov.springboot.servicecore.token.JwtTokenPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -75,8 +76,9 @@ public class AuthService {
 
     public JwtTokenPair validateRefreshToken(JwtRefreshToken token) {
         String username = jwtUtil.getUsernameFromToken(token.token());
-        //todo - check roles match, check if token is revoked, validate token(refresh_token=true, audience, issuer)
+        //todo - check roles match, validate token(refresh_token=true, audience, issuer)
         User userDto = authRepository.findUserByUsername(username);
+
 
         JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(token.token());
         //null if expired
@@ -84,6 +86,11 @@ public class AuthService {
             return null;
         }
         JwtAccessToken accessToken = jwtUtil.generateJwtAccessToken(userDto);
+        Date iatCliam = jwtUtil.getIssuedAt(token.token());
+        if (tokenService.isRevoked(username, iatCliam)) {
+            return null;
+        }
+
         return new JwtTokenPair(accessToken, refreshToken);
     }
 
