@@ -192,4 +192,21 @@ public class JwtUtil {
 
     }
 
+    public Date getIssuedAt(String token) {
+        try {
+            return Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token).getBody().getIssuedAt();
+        } catch (ExpiredJwtException e) {
+            System.out.println("Expired token");
+            return null;
+        } catch (MalformedJwtException | SignatureException e) {
+            System.out.println("Malformed token or invalid signature");
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred in extracting subject", e);
+        }
+
+    }
+
 }
