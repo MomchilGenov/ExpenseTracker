@@ -84,8 +84,11 @@ public class AuthService {
         //todo keep track of last issued token timestamp to blacklist refresh tokens
         String username = jwtUtil.getUsernameFromToken(token.token());
         User userDto = authRepository.findUserByUsername(username);
+        JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(token.token());
+        if (refreshToken == null) {
+            return null;
+        }
         JwtAccessToken accessToken = jwtUtil.generateJwtAccessToken(userDto);
-        JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(userDto);
         return new JwtTokenPair(accessToken, refreshToken);
     }
 
