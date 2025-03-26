@@ -37,7 +37,10 @@ public class TokenService {
      * @return - true, if the token is revoked, false otherwise
      */
     public boolean isRevoked(String username, Date iatClaim) {
-        return this.revokedTokens.get(username).after(iatClaim);
+        if (revokedTokens.containsKey(username)) {
+            return this.revokedTokens.get(username).after(iatClaim);
+        }
+        return false;
     }
 
 }
