@@ -73,17 +73,13 @@ public class AuthService {
         return new JwtAccessTokenStatus(issuer, audience, isExpired, subjectStatus, statusDto.sub_roles_match());
     }
 
-
-    /*todo - check user exists, not revoked, refresh_token=true, audience, issuer, etc
-           and iat is not BEFORE current timestamp for user, if it is, revoke token send null
-    */
     public JwtTokenPair validateRefreshToken(JwtRefreshToken token) {
-        //todo - (for token repo revocation logic) - save the token/jti in the repo upon creation/logout to keep track of revoked
-        //and blacklisted tokens
-        //todo keep track of last issued token timestamp to blacklist refresh tokens
         String username = jwtUtil.getUsernameFromToken(token.token());
+        //todo - check roles match, check if token is revoked, validate token(refresh_token=true, audience, issuer)
         User userDto = authRepository.findUserByUsername(username);
+
         JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(token.token());
+        //null if expired
         if (refreshToken == null) {
             return null;
         }
