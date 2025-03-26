@@ -86,8 +86,8 @@ public class AuthService {
             return null;
         }
         JwtAccessToken accessToken = jwtUtil.generateJwtAccessToken(userDto);
-        Date iatCliam = jwtUtil.getIssuedAt(token.token());
-        if (tokenService.isRevoked(username, iatCliam)) {
+        Date iatClaim = jwtUtil.getIssuedAt(token.token());
+        if (tokenService.isRevoked(username, iatClaim)) {
             return null;
         }
 
