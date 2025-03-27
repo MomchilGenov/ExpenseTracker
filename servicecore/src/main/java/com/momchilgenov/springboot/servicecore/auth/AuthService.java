@@ -48,7 +48,9 @@ public class AuthService {
         String username = jwtUtil.getUsernameFromToken(accessToken);
         Date iatClaim = jwtUtil.getIssuedAt(accessToken);
         if (tokenService.isRevoked(username, iatClaim)) {
-            return null;
+            System.out.println("Revoked token found.");
+            return new JwtAccessTokenStatus(JwtClaimValidationStatus.INVALID, JwtClaimValidationStatus.INVALID,
+                    true, JwtClaimValidationStatus.BANNED, false);
         }
 
         if (jwtUtil.validateIssuer(accessToken)) {
