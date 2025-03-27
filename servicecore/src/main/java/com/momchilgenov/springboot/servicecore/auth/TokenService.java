@@ -27,7 +27,9 @@ public class TokenService {
      * @param username - the user for whom all tokens issued up to current moment should be revoked
      */
     public void revokeAll(String username) {
-        revokedTokens.put(username, Date.from(Instant.now()));
+        //to handle exact timestamp match problem
+        revokedTokens.put(username, Date.from(Instant.now().minusMillis(1000)));
+        // revokedTokens.put(username, Date.from(Instant.now()));
     }
 
     /**
