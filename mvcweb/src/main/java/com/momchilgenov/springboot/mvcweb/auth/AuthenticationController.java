@@ -90,5 +90,11 @@ public class AuthenticationController {
         System.out.println("Current user is " + user);
         return "homepage";
     }
-
+    @PostMapping("/logout")
+    public String logout() {
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        authenticationService.logout(username);
+        SecurityContextHolder.clearContext();
+        return "login";
+    }
 }
