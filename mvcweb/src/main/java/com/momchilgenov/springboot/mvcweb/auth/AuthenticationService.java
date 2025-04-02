@@ -14,15 +14,19 @@ public class AuthenticationService {
     private final String URL_OF_JWT_AUTHENTICATOR;
     private final String URL_OF_JWT_ACCESS_TOKEN_VALIDATION;
     private final String URL_OF_JWT_REFRESH_TOKEN_VALIDATION;
+    private final String URL_OF_LOGOUT_SERVICE;
 
     public AuthenticationService(@Value("${URL_OF_JWT_AUTHENTICATOR}") String URL_OF_JWT_AUTHENTICATOR,
                                  @Value("${URL_OF_JWT_ACCESS_TOKEN_VALIDATION}")
                                  String URL_OF_JWT_ACCESS_TOKEN_VALIDATION,
                                  @Value("${URL_OF_JWT_REFRESH_TOKEN_VALIDATION}")
-                                 String URL_OF_JWT_REFRESH_TOKEN_VALIDATION) {
+                                 String URL_OF_JWT_REFRESH_TOKEN_VALIDATION,
+                                 @Value("${URL_OF_LOGOUT_SERVICE}")
+                                 String URL_OF_LOGOUT_SERVICE) {
         this.URL_OF_JWT_AUTHENTICATOR = URL_OF_JWT_AUTHENTICATOR;
         this.URL_OF_JWT_ACCESS_TOKEN_VALIDATION = URL_OF_JWT_ACCESS_TOKEN_VALIDATION;
         this.URL_OF_JWT_REFRESH_TOKEN_VALIDATION = URL_OF_JWT_REFRESH_TOKEN_VALIDATION;
+        this.URL_OF_LOGOUT_SERVICE = URL_OF_LOGOUT_SERVICE;
     }
 
     public JwtTokenPair authenticateUser(String username, String password) {
@@ -49,6 +53,12 @@ public class AuthenticationService {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.postForObject(URL_OF_JWT_REFRESH_TOKEN_VALIDATION,
                 token, JwtTokenPair.class);
+    }
+
+    public void logout(String username) {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.postForObject(URL_OF_LOGOUT_SERVICE,
+                username, String.class);
     }
 
 }
