@@ -7,6 +7,7 @@ import com.momchilgenov.springboot.mvcweb.token.dto.JwtRefreshToken;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -32,7 +33,12 @@ public class AuthenticationController {
 
     @GetMapping("/login")
     public String showLoginForm(Model model) {
-        //todo - check if user is authenticated, if is authenticated - redirect to homepage(could enter url in search bar
+        //if user is already authenticated and tries to access login page, redirect to homepage
+        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
+            System.out.println("User = " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+            return "redirect:/homepage";
+        }
         model.addAttribute("user", new User());
         System.out.println("In login controller");
         return "login";
