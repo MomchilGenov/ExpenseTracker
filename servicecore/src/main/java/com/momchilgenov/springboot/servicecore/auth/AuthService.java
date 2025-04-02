@@ -98,4 +98,10 @@ public class AuthService {
         return new JwtTokenPair(accessToken, refreshToken);
     }
 
+
+    public void logout(String username) {
+        tokenService.revokeAll(username);
+    }
+
+   
 }
