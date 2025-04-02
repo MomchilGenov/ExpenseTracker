@@ -47,7 +47,6 @@ public class AuthenticationController {
     @PostMapping("/login")
     public String login(@ModelAttribute("user") User user, HttpServletResponse response) {
         System.out.println("in login POST method");
-        //todo - check if user is authenticated, if is authenticated - redirect to homepage(could enter url in search bar)
         try {
             /*
              * calls the only available authentication provider(JwtAuthProvider)
