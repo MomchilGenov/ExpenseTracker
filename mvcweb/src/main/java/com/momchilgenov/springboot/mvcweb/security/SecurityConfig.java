@@ -38,17 +38,9 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authProvider)
                 .exceptionHandling(e ->
-                e.authenticationEntryPoint((request, response, authException) -> {
-                    response.sendRedirect("/login"); // Redirect to login page
-                }));
-             /*   .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll())
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
-                        .permitAll()
-                );*/
+                        e.authenticationEntryPoint((request, response, authException) -> {
+                            response.sendRedirect("/login"); // Redirect to login page
+                        })).logout(AbstractHttpConfigurer::disable);
 
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
 
