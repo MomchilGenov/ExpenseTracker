@@ -49,8 +49,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public boolean logout() {
-        //todo - revoke all sent tokens,update timestamp
+    public boolean logout(@RequestBody String username) {
+        authService.logout(username);
         return false;
     }
 }
