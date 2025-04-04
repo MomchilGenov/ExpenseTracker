@@ -100,6 +100,9 @@ public class AuthenticationController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
+        if (!(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)) {
+            return "redirect:/homepage";
+        }
         User user = new User();
         model.addAttribute("user", user);
         return "registration";
