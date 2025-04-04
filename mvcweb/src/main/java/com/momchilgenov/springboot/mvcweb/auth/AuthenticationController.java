@@ -89,11 +89,19 @@ public class AuthenticationController {
         System.out.println("Current user is " + user);
         return "homepage";
     }
+
     @PostMapping("/logout")
     public String logout() {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         authenticationService.logout(username);
         SecurityContextHolder.clearContext();
         return "login";
+    }
+
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        return "registration";
     }
 }
