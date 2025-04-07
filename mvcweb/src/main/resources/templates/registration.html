@@ -5,7 +5,7 @@
   <title>Register</title>
 </head>
 <body>
-<form th:action="@{/register}" th:method="GET">
+<form th:action="@{/register}" th:method="POST">
   Username:
   <br><br>
   <input type="text" placeholder="Enter username" th:field="${user.username}"/>
