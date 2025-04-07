@@ -103,5 +103,16 @@ public class AuthService {
         tokenService.revokeAll(username);
     }
 
-   
+    public UserRegistrationStatus register(User user) {
+        User userExists = authRepository.findUserByUsername(user.getUsername());
+        if (userExists != null) {
+            return new UserRegistrationStatus(true, null);
+        }
+        authRepository.registerUser(user);
+        tokenService.revokeAll(user.getUsername());
+        JwtAccessToken accessToken = jwtUtil.generateJwtAccessToken(user);
+        JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(user);
+        JwtTokenPair tokenPair = new JwtTokenPair(accessToken, refreshToken);
+        return new UserRegistrationStatus(false, tokenPair);
+    }
 }
