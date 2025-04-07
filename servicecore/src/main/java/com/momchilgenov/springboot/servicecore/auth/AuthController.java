@@ -43,9 +43,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public boolean register() {
-        //todo - do last, after domain is clear
-        return false;
+    public UserRegistrationStatus register(@RequestBody User user) {
+        return authService.register(user);
     }
 
     @PostMapping("/logout")
