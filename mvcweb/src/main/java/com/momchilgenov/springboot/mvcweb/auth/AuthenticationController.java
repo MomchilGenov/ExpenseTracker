@@ -4,6 +4,7 @@ import com.momchilgenov.springboot.mvcweb.entity.User;
 import com.momchilgenov.springboot.mvcweb.token.JwtAuthenticationToken;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessToken;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtRefreshToken;
+import com.momchilgenov.springboot.mvcweb.token.dto.JwtTokenPair;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -106,5 +108,31 @@ public class AuthenticationController {
         User user = new User();
         model.addAttribute("user", user);
         return "registration";
+    }
+
+
+    @PostMapping("/register")
+    public String registerUser(@ModelAttribute("user") User user, BindingResult result, HttpServletResponse response) {
+        //todo - validate user input(password, username is normal, etc)
+        UserRegistrationStatus userRegistrationStatus = authenticationService.register(user);
+        if (userRegistrationStatus.usernameCollides()) {
+            result.rejectValue("username", "error.username", "This username is already taken");
+            return "registration";
+        }
+        JwtTokenPair tokenPair = userRegistrationStatus.tokenPair();
+        JwtRefreshToken refreshToken = tokenPair.refreshToken();
+        JwtAccessToken accessToken = tokenPair.accessToken();
+
+        Cookie accessTokenCookie = new Cookie("accessToken", accessToken.token());
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setPath("/");
+        response.addCookie(accessTokenCookie);
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken.token());
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        response.addCookie(refreshTokenCookie);
+
+        return "redirect:/homepage";
     }
 }
