@@ -48,8 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public boolean logout(@RequestBody String username) {
+    public void logout(@RequestBody String username) {
         authService.logout(username);
-        return false;
     }
 }
