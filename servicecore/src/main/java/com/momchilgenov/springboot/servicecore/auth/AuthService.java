@@ -80,17 +80,32 @@ public class AuthService {
     }
 
     public JwtTokenPair validateRefreshToken(JwtRefreshToken token) {
+        if (!jwtUtil.validateIssuer(token.token())) {
+            System.out.println("Refresh token has invalid issuer");
+            return null;
+        }
+        if (!jwtUtil.validateAudience(token.token())) {
+            System.out.println("Refresh token has invalid audience");
+            return null;
+        }
+        if (!jwtUtil.isRefreshToken(token.token())) {
+            System.out.println("Token is not a refresh token.");
+            return null;
+        }
         String username = jwtUtil.getUsernameFromToken(token.token());
-        //todo - check roles match, validate token(refresh_token=true, audience, issuer)
         User userDto = authRepository.findUserByUsername(username);
         Date iatClaim = jwtUtil.getIssuedAt(token.token());
         if (tokenService.isRevoked(username, iatClaim)) {
+            System.out.println("Refresh token is revoked");
             return null;
         }
         tokenService.revokeAll(username);
         JwtRefreshToken refreshToken = jwtUtil.generateJwtRefreshToken(token.token());
+        System.out.println("Received refresh token was = " + token.token());
+        System.out.println("Generated refresh token is = " + refreshToken.token());
         //null if expired
         if (refreshToken == null) {
+            System.out.println("Refresh token has expired");
             return null;
         }
         JwtAccessToken accessToken = jwtUtil.generateJwtAccessToken(userDto);
@@ -105,6 +120,8 @@ public class AuthService {
 
     public UserRegistrationStatus register(User user) {
         User userExists = authRepository.findUserByUsername(user.getUsername());
+        //test purposes
+        //User userExists = null;
         if (userExists != null) {
             return new UserRegistrationStatus(true, null);
         }
