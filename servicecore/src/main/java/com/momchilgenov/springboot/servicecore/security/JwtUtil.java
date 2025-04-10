@@ -11,10 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class JwtUtil {
@@ -69,13 +66,13 @@ public class JwtUtil {
 
             return new JwtRefreshToken(
                     Jwts.builder()
+                            .addClaims(claims)
                             .setAudience(AUDIENCE)
                             .setIssuer(ISSUER)
                             .setIssuedAt(new Date())
                             .setSubject(username)
                             .setExpiration(claims.getExpiration())
                             .signWith(key, SignatureAlgorithm.HS256)
-                            .addClaims(claims)
                             .compact()
             );
 
@@ -158,6 +155,24 @@ public class JwtUtil {
         }
     }
 
+    public boolean isRefreshToken(String token) {
+        try {
+            var tokenType = Jwts.parserBuilder().setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                    .build()
+                    .parseClaimsJws(token).getBody().get("refresh_token", Boolean.class);
+
+            return Objects.requireNonNullElse(tokenType, false);
+
+        } catch (ExpiredJwtException e) {
+            return e.getClaims().get("refresh_token").equals(true);
+        } catch (MalformedJwtException | SignatureException e) {
+            System.out.println("Malformed token or invalid signature");
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred in validating token type", e);
+        }
+    }
+
     public String getUsernameFromToken(String token) {
 
         try {
@@ -199,7 +214,7 @@ public class JwtUtil {
                     .parseClaimsJws(token).getBody().getIssuedAt();
         } catch (ExpiredJwtException e) {
             System.out.println("Expired token");
-            return null;
+            return e.getClaims().getIssuedAt();
         } catch (MalformedJwtException | SignatureException e) {
             System.out.println("Malformed token or invalid signature");
             return null;
