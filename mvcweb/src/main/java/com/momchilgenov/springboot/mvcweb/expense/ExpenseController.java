@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/v1/expenses")
 public class ExpenseController {
 
-   
+    @GetMapping("")
+    public String showExpenseDashboard() {
+        return "expenses/list";
+    }
 
 
 }
