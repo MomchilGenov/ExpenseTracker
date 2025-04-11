@@ -32,9 +32,9 @@
         <td th:text="${expense.category.name}"></td>
         <td th:text="${expense.date}"></td>
         <td>
-            <a th:href="@{/expenses/edit/{id}(id=${expense.id})}"
+            <a th:href="@{/expenses/{id}(id=${expense.id})}"
                class="btn btn-warning btn-sm">Edit</a>
-            <a th:href="@{/expenses/delete/{id}(id=${expense.id})}"
+            <a th:href="@{/expenses/{id}(id=${expense.id})}"
                class="btn btn-danger btn-sm"
                onclick="return confirm('Are you sure you want to delete this expense?');">
                 Delete</a>
