@@ -1,20 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<form th:action="@{/login}" th:method="POST">
-    Username:
-    <br><br>
-    <input type="text" placeholder="Enter username" th:field="${user.username}"/>
-    <br><br>
-    Password
-    <br><br>
-    <input type="password" th:field="${user.password}"/>
-    <br><br>
-    <input type="submit" th:value="Login"/>
-</form>
+<body class="bg-light d-flex align-items-center justify-content-center vh-100">
+
+<div class="card p-4 shadow-lg" style="width: 350px;">
+    <h2 class="text-center mb-4">Login</h2>
+    <form th:action="@{/login}" th:method="post" th:object="${user}">
+
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" th:field="*{username}" class="form-control" id="username" placeholder="Enter username"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" th:field="*{password}" class="form-control" id="password"
+                   placeholder="Enter password" required>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+        <div class="d-grid text-center mt-3">
+            <p class="mb-2" style="font-size: 14px; color: #555;">Don't have an account?</p>
+            <a th:href="@{/register}" class="btn btn-outline-secondary btn-sm">Register</a>
+        </div>
+
+    </form>
+</div>
+
 </body>
 </html>
