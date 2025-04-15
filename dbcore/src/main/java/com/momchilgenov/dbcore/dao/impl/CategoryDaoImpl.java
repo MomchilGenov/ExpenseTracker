@@ -3,7 +3,6 @@ package com.momchilgenov.dbcore.dao.impl;
 import com.momchilgenov.dbcore.dao.CategoryDao;
 import com.momchilgenov.dbcore.entity.Category;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Transient;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -40,6 +39,7 @@ public class CategoryDaoImpl implements CategoryDao {
         entityManager.persist(category);
     }
 
+    @Transactional
     @Override
     public Category update(Category category) {
         return this.entityManager.merge(category);
