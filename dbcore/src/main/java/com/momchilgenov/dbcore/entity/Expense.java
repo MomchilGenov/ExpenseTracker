@@ -34,4 +34,67 @@ public class Expense {
     @JoinColumn(name = "user_id")
     private User expenseCreator;
 
+    public Expense() {
+
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public User getExpenseCreator() {
+        return expenseCreator;
+    }
+
+    public void setExpenseCreator(User expenseCreator) {
+        this.expenseCreator = expenseCreator;
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", name='" + name + '\'' +
+                ", date=" + date +
+                ", category=" + category +
+                ", expenseCreator=" + expenseCreator +
+                '}';
+    }
 }
