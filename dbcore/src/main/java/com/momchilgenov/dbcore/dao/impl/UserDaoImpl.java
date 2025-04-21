@@ -34,6 +34,24 @@ public class UserDaoImpl implements UserDao {
 
     @Transactional
     @Override
+    public User update(User user) {
+        return this.entityManager.merge(user);
+    }
+
+    @Transactional
+    @Override
+    public User findById(Long id) {
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public List<User> findAll() {
+        return null;
+    }
+
+    @Transactional
+    @Override
     public User findUserByUsername(String username) {
         TypedQuery<User> query = this.entityManager.
                 createQuery("FROM User u WHERE u.username=:username", User.class);
