@@ -47,7 +47,7 @@ public class UserDaoImpl implements UserDao {
     @Transactional
     @Override
     public List<User> findAll() {
-        TypedQuery<User> query = this.entityManager.createQuery("FROM User", User.class)
+        TypedQuery<User> query = this.entityManager.createQuery("FROM User", User.class);
         return query.getResultList();
     }
 
