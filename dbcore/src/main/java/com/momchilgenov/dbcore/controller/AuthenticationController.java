@@ -27,5 +27,9 @@ public class AuthenticationController {
         return authenticationService.findUserByUsername(username);
     }
 
+    @PostMapping("/authenticateUser")
+    public UserDto authenticateUser(@RequestBody UserDto user) {
+        return authenticationService.authenticateUser(user);
+    }
 
 }
