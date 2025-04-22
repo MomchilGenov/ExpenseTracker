@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 public class UserDto {
 
     private String username;
+    private String password;
 
     private List<String> roles;
 
@@ -34,6 +35,13 @@ public class UserDto {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public List<String> getRoles() {
         return roles;
@@ -47,6 +55,7 @@ public class UserDto {
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
