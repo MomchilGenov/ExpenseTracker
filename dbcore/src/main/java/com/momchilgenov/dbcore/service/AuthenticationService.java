@@ -15,5 +15,11 @@ public class AuthenticationService {
         this.userDao = userDao;
     }
 
-
+    public UserDto findUserByUsername(String username) {
+        User foundUser = this.userDao.findUserByUsername(username);
+        if (foundUser == null) {
+            return null;
+        }
+        return new UserDto(foundUser);
+    }
 }
