@@ -35,4 +35,8 @@ public class AuthRepository {
         return new User("Ivan Samuilov", null, dummyRoles);
     }
 
+    public void registerUser(User user) {
+
+    }
+
 }
