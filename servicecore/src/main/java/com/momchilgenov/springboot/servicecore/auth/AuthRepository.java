@@ -3,7 +3,6 @@ package com.momchilgenov.springboot.servicecore.auth;
 import com.momchilgenov.springboot.servicecore.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -23,13 +22,8 @@ public class AuthRepository {
 
     //todo rename auth repo to AuthenticationDatabaseApiClient or smth like that
     public User authenticateUser(User user) {
-        //todo - check for user in a db, if not present, return null, this is directly linked with
-        //JwtAuthProvider return statement and placing the same username that was received.
-        //todo - see same problems for findUserByUsername()
-        List<String> dummyRoles = new ArrayList<>();
-        dummyRoles.add("ROLE_USER");
-        dummyRoles.add("ROLE_ADMIN");
-        return new User("Ivan Samuilov", null, dummyRoles);
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.postForObject(URL_OF_AUTHENTICATE_USER, user, User.class);
     }
 
     //todo - implement real impl, rename class to a service/client
