@@ -4,6 +4,7 @@ import com.momchilgenov.springboot.servicecore.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public class AuthRepository {
     private final String URL_OF_FIND_USER_BY_USERNAME;
 
-    public AuthRepository(@Value("URL_OF_FIND_USER_BY_USERNAME") String URL_OF_FIND_USER_BY_USERNAME) {
+    public AuthRepository(@Value("${URL_OF_FIND_USER_BY_USERNAME}") String URL_OF_FIND_USER_BY_USERNAME) {
         this.URL_OF_FIND_USER_BY_USERNAME = URL_OF_FIND_USER_BY_USERNAME;
     }
 
@@ -35,14 +36,12 @@ public class AuthRepository {
     }
 
     public User findUserByUsername(String username) {
-        List<String> dummyRoles = new ArrayList<>();
-        dummyRoles.add("ROLE_USER");
-        dummyRoles.add("ROLE_ADMIN");
-        return new User("Ivan Samuilov", null, dummyRoles);
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.postForObject(URL_OF_FIND_USER_BY_USERNAME, username, User.class);
     }
 
     public void registerUser(User user) {
-
+        
     }
 
 }
