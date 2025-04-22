@@ -1,6 +1,7 @@
 package com.momchilgenov.springboot.servicecore.auth;
 
 import com.momchilgenov.springboot.servicecore.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,6 +11,11 @@ import java.util.List;
 
 @Repository
 public class AuthRepository {
+    private final String URL_OF_FIND_USER_BY_USERNAME;
+
+    public AuthRepository(@Value("URL_OF_FIND_USER_BY_USERNAME") String URL_OF_FIND_USER_BY_USERNAME) {
+        this.URL_OF_FIND_USER_BY_USERNAME = URL_OF_FIND_USER_BY_USERNAME;
+    }
 
     //todo rename auth repo to AuthenticationDatabaseApiClient or smth like that
     public User authenticateUser(User user) {
