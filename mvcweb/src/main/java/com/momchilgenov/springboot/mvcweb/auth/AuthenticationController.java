@@ -47,7 +47,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user, HttpServletResponse response) {
+    public String login(@ModelAttribute("user") User user, BindingResult result, HttpServletResponse response, Model model) {
         System.out.println("in login POST method");
         try {
             /*
@@ -56,10 +56,7 @@ public class AuthenticationController {
              * */
             JwtAuthenticationToken authentication =
                     (JwtAuthenticationToken) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            if (authentication != null) {
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-            //todo - handle null cases and return an error on login form (bad credentials)
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             JwtAccessToken accessToken = authentication.getTokenPair().accessToken();
             JwtRefreshToken refreshToken = authentication.getTokenPair().refreshToken();
 
@@ -80,6 +77,9 @@ public class AuthenticationController {
 
         } catch (AuthenticationException e) {
             System.out.println("Did not work");
+            result.reject("error.usernameOrPassword", "Incorrect username or password");
+            model.addAttribute("user", user);
+            return "login";
         }
         return "redirect:/homepage";
     }
