@@ -13,14 +13,16 @@ import java.util.List;
 @Repository
 public class AuthRepository {
     private final String URL_OF_FIND_USER_BY_USERNAME;
+    private final String URL_OF_AUTHENTICATE_USER;
 
-    public AuthRepository(@Value("${URL_OF_FIND_USER_BY_USERNAME}") String URL_OF_FIND_USER_BY_USERNAME) {
+    public AuthRepository(@Value("${URL_OF_FIND_USER_BY_USERNAME}") String URL_OF_FIND_USER_BY_USERNAME,
+                          @Value("${URL_OF_AUTHENTICATE_USER}") String URL_OF_AUTHENTICATE_USER) {
         this.URL_OF_FIND_USER_BY_USERNAME = URL_OF_FIND_USER_BY_USERNAME;
+        this.URL_OF_AUTHENTICATE_USER = URL_OF_AUTHENTICATE_USER;
     }
 
     //todo rename auth repo to AuthenticationDatabaseApiClient or smth like that
     public User authenticateUser(User user) {
-        //can replace with a dummy in memory db for more users and role testing.
         //todo - check for user in a db, if not present, return null, this is directly linked with
         //JwtAuthProvider return statement and placing the same username that was received.
         //todo - see same problems for findUserByUsername()
@@ -41,7 +43,7 @@ public class AuthRepository {
     }
 
     public void registerUser(User user) {
-        
+
     }
 
 }
