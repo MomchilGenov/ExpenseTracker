@@ -22,4 +22,16 @@ public class AuthenticationService {
         }
         return new UserDto(foundUser);
     }
+
+    public UserDto authenticateUser(UserDto user) {
+        User receivedUser = new User();
+        receivedUser.setUsername(user.getUsername());
+        receivedUser.setPassword(user.getPassword());
+        User foundUser = this.userDao.authenticateUser(receivedUser);
+        if (foundUser == null) {
+            return null;
+        }
+
+        return new UserDto(foundUser);
+    }
 }
