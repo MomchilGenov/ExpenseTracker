@@ -5,10 +5,7 @@ import com.momchilgenov.dbcore.entity.Role;
 import com.momchilgenov.dbcore.entity.User;
 import com.momchilgenov.dbcore.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +21,11 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
+    //post mapping, because otherwise username is exposed; security reasons
+    @PostMapping("/user")
+    public UserDto getUserByUsername(@RequestBody String username) {
+        return authenticationService.findUserByUsername(username);
+    }
 
 
 }
