@@ -26,12 +26,16 @@
         <div class="d-grid">
             <button type="submit" class="btn btn-primary">Login</button>
         </div>
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p th:each="err : ${#fields.globalErrors()}" th:text="${err}" class="alert alert-danger mt-3" role="alert">
+                Error</p>
+        </div>
         <div class="d-grid text-center mt-3">
             <p class="mb-2" style="font-size: 14px; color: #555;">Don't have an account?</p>
             <a th:href="@{/register}" class="btn btn-outline-secondary btn-sm">Register</a>
         </div>
-
     </form>
+
 </div>
 
 </body>
