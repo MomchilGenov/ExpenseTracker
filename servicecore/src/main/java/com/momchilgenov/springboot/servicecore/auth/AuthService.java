@@ -94,6 +94,9 @@ public class AuthService {
         }
         String username = jwtUtil.getUsernameFromToken(token.token());
         User userDto = authRepository.findUserByUsername(username);
+        if (userDto == null) {
+            return null;
+        }
         Date iatClaim = jwtUtil.getIssuedAt(token.token());
         if (tokenService.isRevoked(username, iatClaim)) {
             System.out.println("Refresh token is revoked");
