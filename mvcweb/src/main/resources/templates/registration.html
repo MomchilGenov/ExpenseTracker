@@ -1,39 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Register</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light d-flex align-items-center justify-content-center vh-100">
 
 <div class="card p-4 shadow-lg" style="width: 350px;">
-  <h2 class="text-center mb-4">Register</h2>
+    <h2 class="text-center mb-4">Register</h2>
 
-  <form th:action="@{/register}" th:method="POST" th:object="${user}">
+    <form th:action="@{/register}" th:method="POST" th:object="${user}">
 
-    <div class="mb-3">
-      <label for="username" class="form-label">Username</label>
-      <input type="text" th:field="*{username}" class="form-control" id="username" placeholder="Enter username"
-             required>
-    </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" th:field="*{username}" class="form-control" id="username" placeholder="Enter username"
+                   required>
+        </div>
+        <div th:if="${#fields.hasErrors('username')}" class="alert alert-danger mt-3" th:errors="*{username}"
+             role="alert"></div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" th:field="*{password}" class="form-control" id="password"
+                   placeholder="Enter password" required>
+        </div>
 
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" th:field="*{password}" class="form-control" id="password"
-             placeholder="Enter password" required>
-    </div>
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
 
-    <div class="d-grid">
-      <button type="submit" class="btn btn-primary">Register</button>
-    </div>
-
-    <div class="d-grid text-center mt-3">
-      <p class="mb-2" style="font-size: 14px; color: #555;">Already have an account?</p>
-      <a th:href="@{/login}" class="btn btn-outline-secondary btn-sm">Sign In</a>
-    </div>
-
-  </form>
+        <div class="d-grid text-center mt-3">
+            <p class="mb-2" style="font-size: 14px; color: #555;">Already have an account?</p>
+            <a th:href="@{/login}" class="btn btn-outline-secondary btn-sm">Sign In</a>
+        </div>
+    </form>
 </div>
 
 </body>
