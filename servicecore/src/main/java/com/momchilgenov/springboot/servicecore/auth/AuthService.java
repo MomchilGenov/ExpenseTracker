@@ -8,6 +8,7 @@ import com.momchilgenov.springboot.servicecore.token.JwtTokenPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class AuthService {
     private final AuthRepository authRepository;
     private final TokenService tokenService;
     private final JwtUtil jwtUtil;
+    private final String DEFAULT_ROLE = "ROLE_USER";
 
     @Autowired
     public AuthService(AuthRepository authRepository, JwtUtil jwtUtil, TokenService tokenService) {
@@ -128,6 +130,10 @@ public class AuthService {
         if (userExists != null) {
             return new UserRegistrationStatus(true, null);
         }
+        //gives the user a default role upon registration
+        List<String> roles = new ArrayList<>();
+        roles.add(DEFAULT_ROLE);
+        user.setRoles(roles);
         authRepository.registerUser(user);
         tokenService.revokeAll(user.getUsername());
         JwtAccessToken accessToken = jwtUtil.generateJwtAccessToken(user);
