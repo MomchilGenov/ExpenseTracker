@@ -32,4 +32,9 @@ public class AuthenticationController {
         return authenticationService.authenticateUser(user);
     }
 
+    @PostMapping("register")
+    public boolean registerUser(@RequestBody UserDto user){
+        return authenticationService.register(user);
+    }
+
 }
