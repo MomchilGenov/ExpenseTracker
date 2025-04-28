@@ -101,7 +101,7 @@ public class UserDaoImpl implements UserDao {
         query.setParameter("username", username);
         List<User> singleUser = query.getResultList();
         if (singleUser == null || singleUser.isEmpty()) {
-            return null;
+            return new UserAuthenticationStatus(UserCredentialsStatus.NOT_FOUND, null, null);
         }
         User foundUser = singleUser.get(0);
         //return null if no such user is found,passwords do not match or is banned
