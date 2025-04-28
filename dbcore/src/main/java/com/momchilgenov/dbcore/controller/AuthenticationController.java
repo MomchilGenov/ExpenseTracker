@@ -2,14 +2,12 @@ package com.momchilgenov.dbcore.controller;
 
 import com.momchilgenov.dbcore.dao.dto.AuthorityValidationDto;
 import com.momchilgenov.dbcore.dao.dto.UserDto;
-import com.momchilgenov.dbcore.entity.Role;
-import com.momchilgenov.dbcore.entity.User;
 import com.momchilgenov.dbcore.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
