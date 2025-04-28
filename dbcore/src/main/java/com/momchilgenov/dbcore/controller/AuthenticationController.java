@@ -1,5 +1,6 @@
 package com.momchilgenov.dbcore.controller;
 
+import com.momchilgenov.dbcore.dao.dto.AuthorityValidationDto;
 import com.momchilgenov.dbcore.dao.dto.UserDto;
 import com.momchilgenov.dbcore.entity.Role;
 import com.momchilgenov.dbcore.entity.User;
@@ -33,8 +34,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("register")
-    public boolean registerUser(@RequestBody UserDto user){
+    public boolean registerUser(@RequestBody UserDto user) {
         return authenticationService.register(user);
     }
 
+    @PostMapping("/validateAuthority")
+    public AuthorityValidationDto validateSubjectExistsAndRolesMatch(@RequestBody AuthorityValidationDto userData) {
+        return this.authenticationService.validateSubjectExistsAndRolesMatch(userData);
+    }
 }
