@@ -2,6 +2,9 @@ package com.momchilgenov.dbcore.service;
 
 import com.momchilgenov.dbcore.dao.RoleDao;
 import com.momchilgenov.dbcore.dao.UserDao;
+import com.momchilgenov.dbcore.dao.dto.AuthorityValidationDto;
+import com.momchilgenov.dbcore.dao.dto.UserAuthenticationStatus;
+import com.momchilgenov.dbcore.dao.dto.UserCredentialsStatus;
 import com.momchilgenov.dbcore.dao.dto.UserDto;
 import com.momchilgenov.dbcore.entity.Role;
 import com.momchilgenov.dbcore.entity.User;
@@ -61,5 +64,31 @@ public class AuthenticationService {
         newUser.setRoles(roles);
         userDao.save(newUser);
         return true;
+    }
+
+    public AuthorityValidationDto validateSubjectExistsAndRolesMatch(AuthorityValidationDto userData) {
+        System.out.println("Received user to validate = " + userData.getUsername());
+        System.out.println("Received user to validate = " + userData.getRoles());
+        UserAuthenticationStatus status =
+                userDao.validateSubjectExistsAndRolesMatch(userData.getUsername(), userData.getRoles());
+        AuthorityValidationDto validation = new AuthorityValidationDto();
+        System.out.println(status);
+        if (status.usernameExists() == null) {
+            validation.setUsername(null);
+            validation.setRoles(null);
+            return validation;
+        }
+        if (status.rolesMatch() == null) {
+            validation.setUsername(userData.getUsername());
+            validation.setRoles(null);
+            return validation;
+        }
+        if (status.usernameExists().equals(UserCredentialsStatus.EXISTS)) {
+            validation.setUsername(userData.getUsername());
+        }
+        if (status.rolesMatch().equals(UserCredentialsStatus.ROLES_MATCH)) {
+            validation.setRoles(userData.getRoles());
+        }
+        return validation;
     }
 }
