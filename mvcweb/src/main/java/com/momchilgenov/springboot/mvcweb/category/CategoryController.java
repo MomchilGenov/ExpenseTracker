@@ -28,6 +28,14 @@ public class CategoryController {
         return "categories/list";
     }
 
+    @GetMapping("/create")
+    public String createCategory(Model model) {
+        Category newCategory = new Category("");
+        newCategory.setName(null);
+        model.addAttribute("category", newCategory);
+        return "categories/list";
+    }
+
     
 
 }
