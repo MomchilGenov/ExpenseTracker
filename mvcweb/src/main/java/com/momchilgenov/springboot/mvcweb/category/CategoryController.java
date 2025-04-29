@@ -2,9 +2,7 @@ package com.momchilgenov.springboot.mvcweb.category;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +47,13 @@ public class CategoryController {
         fetchedCategory.setId(42L);
         return "categories/category_form";
     }
+
+    @PostMapping("")
+    public String saveCategory(@ModelAttribute Category category) {
+        System.out.println("Created category = " + category.getName());
+        return "redirect:/api/v1/categories";
+    }
+
 
 
 }
