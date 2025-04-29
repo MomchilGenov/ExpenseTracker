@@ -3,6 +3,7 @@ package com.momchilgenov.springboot.mvcweb.category;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -19,6 +20,11 @@ public class CategoryController {
         Category category3 = new Category("Tech");
         Category category4 = new Category("Debts");
         Category category5 = new Category("Other");
+        category1.setId(1L);
+        category2.setId(2L);
+        category3.setId(3L);
+        category4.setId(4L);
+        category5.setId(5L);
         categories.add(category1);
         categories.add(category2);
         categories.add(category3);
@@ -33,9 +39,16 @@ public class CategoryController {
         Category newCategory = new Category("");
         newCategory.setName(null);
         model.addAttribute("category", newCategory);
-        return "categories/list";
+        return "categories/category_form";
     }
 
-    
+    @GetMapping("/{id}")
+    public String editCategory(@PathVariable Long id, Model model) {
+        Category fetchedCategory = new Category("I was in the db");
+        model.addAttribute("category", fetchedCategory);
+        fetchedCategory.setId(42L);
+        return "categories/category_form";
+    }
+
 
 }
