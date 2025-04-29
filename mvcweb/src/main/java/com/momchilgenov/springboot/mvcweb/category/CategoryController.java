@@ -61,4 +61,10 @@ public class CategoryController {
         return "redirect:/api/v1/categories";
     }
 
+    @DeleteMapping("/{id}")
+    public String deleteCategory(@PathVariable long id) {
+        System.out.println("Deleting category with id = " + id);
+        return "redirect:/api/v1/categories";
+    }
+
 }
