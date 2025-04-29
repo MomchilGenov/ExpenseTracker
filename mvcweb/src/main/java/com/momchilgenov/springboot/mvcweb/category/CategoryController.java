@@ -54,6 +54,11 @@ public class CategoryController {
         return "redirect:/api/v1/categories";
     }
 
-
+    @PutMapping("/{id}")
+    public String updateCategory(@PathVariable Long id, @ModelAttribute Category category) {
+        System.out.println("Id of edited category = " + id);
+        System.out.println("Category updated name = " + category.getName());
+        return "redirect:/api/v1/categories";
+    }
 
 }
