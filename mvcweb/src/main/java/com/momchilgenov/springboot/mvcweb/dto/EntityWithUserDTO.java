@@ -4,13 +4,16 @@ public class EntityWithUserDTO<T> {
     private String username;
     private T entity;
 
+    private Long id;
+
     public EntityWithUserDTO() {
 
     }
 
-    public EntityWithUserDTO(String username, T entity) {
+    public EntityWithUserDTO(String username, T entity, Long id) {
         this.username = username;
         this.entity = entity;
+        this.id = id;
     }
 
     public String getUsername() {
@@ -29,11 +32,20 @@ public class EntityWithUserDTO<T> {
         this.entity = entity;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "EntityWithUserDTO{" +
                 "username='" + username + '\'' +
                 ", entity=" + entity +
+                ", id=" + id +
                 '}';
     }
 }
