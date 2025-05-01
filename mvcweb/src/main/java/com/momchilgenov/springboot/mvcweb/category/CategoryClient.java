@@ -2,6 +2,7 @@ package com.momchilgenov.springboot.mvcweb.category;
 
 import com.momchilgenov.springboot.mvcweb.client.EntityClient;
 import com.momchilgenov.springboot.mvcweb.dto.EntityWithUserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,8 +15,11 @@ public class CategoryClient implements EntityClient<Category> {
     private final String URL_OF_GET_CATEGORY_BY_ID;
     private final String URL_OF_UPDATE_CATEGORY;
     private final String URL_OF_DELETE_CATEGORY;
+    private final RestTemplate restTemplate;
 
-    public CategoryClient(@Value("URL_OF_FIND_ALL_CATEGORIES") String URL_OF_FIND_ALL_CATEGORIES,
+    @Autowired
+    public CategoryClient(RestTemplate restTemplate,
+                          @Value("URL_OF_FIND_ALL_CATEGORIES") String URL_OF_FIND_ALL_CATEGORIES,
                           @Value("URL_OF_CREATE_CATEGORY") String URL_OF_CREATE_CATEGORY,
                           @Value("URL_OF_GET_CATEGORY_BY_ID") String URL_OF_GET_CATEGORY_BY_ID,
                           @Value("URL_OF_UPDATE_CATEGORY") String URL_OF_UPDATE_CATEGORY,
@@ -25,13 +29,13 @@ public class CategoryClient implements EntityClient<Category> {
         this.URL_OF_GET_CATEGORY_BY_ID = URL_OF_GET_CATEGORY_BY_ID;
         this.URL_OF_UPDATE_CATEGORY = URL_OF_UPDATE_CATEGORY;
         this.URL_OF_DELETE_CATEGORY = URL_OF_DELETE_CATEGORY;
+        this.restTemplate = restTemplate;
 
 
     }
 
     @Override
     public List<Category> findAll(String username) {
-        RestTemplate restTemplate = new RestTemplate();
         List<Category> categories = restTemplate.postForObject(URL_OF_FIND_ALL_CATEGORIES,
                 username, List.class);
 
