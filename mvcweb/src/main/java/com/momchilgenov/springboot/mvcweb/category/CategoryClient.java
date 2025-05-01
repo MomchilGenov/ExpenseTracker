@@ -50,7 +50,10 @@ public class CategoryClient implements EntityClient<Category> {
 
     @Override
     public Category getById(String username, Long id) {
-        return null;
+        EntityWithUserDTO<Category> entityDto = new EntityWithUserDTO<>();
+        entityDto.setUsername(username);
+        entityDto.setId(id);
+        return restTemplate.postForObject(URL_OF_GET_CATEGORY_BY_ID, entityDto, Category.class);
     }
 
     @Override
