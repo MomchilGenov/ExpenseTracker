@@ -58,7 +58,7 @@ public class CategoryClient implements EntityClient<Category> {
 
     @Override
     public void update(EntityWithUserDTO<Category> entityDto) {
-
+        restTemplate.put(URL_OF_UPDATE_CATEGORY, entityDto, Void.class);
     }
 
     @Override
