@@ -28,6 +28,10 @@ public class CategoryService {
         return this.categoryClient.getById(username, id);
     }
 
-   
+    public void update(EntityWithUserDTO<Category> entityDto) {
+        this.categoryClient.update(entityDto);
+    }
+
+  
 
 }
