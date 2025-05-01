@@ -24,6 +24,10 @@ public class CategoryService {
         this.categoryClient.create(entityDto);
     }
 
+    public Category getById(String username, Long id) {
+        return this.categoryClient.getById(username, id);
+    }
+
    
 
 }
