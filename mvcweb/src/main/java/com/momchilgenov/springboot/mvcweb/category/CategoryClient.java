@@ -31,7 +31,11 @@ public class CategoryClient implements EntityClient<Category> {
 
     @Override
     public List<Category> findAll(String username) {
-        return null;
+        RestTemplate restTemplate = new RestTemplate();
+        List<Category> categories = restTemplate.postForObject(URL_OF_FIND_ALL_CATEGORIES,
+                username, List.class);
+
+        return categories;
     }
 
     @Override
