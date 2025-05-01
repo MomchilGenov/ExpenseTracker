@@ -32,6 +32,8 @@ public class CategoryService {
         this.categoryClient.update(entityDto);
     }
 
-  
+    public void delete(String username, Long id) {
+        this.categoryClient.delete(username, id);
+    }
 
 }
