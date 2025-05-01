@@ -68,9 +68,9 @@ public class ExpenseController {
         System.out.println("Received expense with id = " + id);
         List<Category> dummyCategories = new ArrayList<>();
         Category category1 = new Category("Clothes");
-        category1.setId(1);
+        category1.setId(1L);
         Category category2 = new Category("Travel");
-        category2.setId(18);
+        category2.setId(18L);
         Expense expense = new Expense("Testing edit page", 800836,
                 LocalDate.now(), category1);
         expense.setId(123);
@@ -115,7 +115,7 @@ public class ExpenseController {
         List<Category> dummyCategories = new ArrayList<>();
         Category category1 = new Category("Clothes");
         Category category2 = new Category("Travel");
-        category2.setId(18);
+        category2.setId(18L);
         Category category3 = new Category("Loan");
         Category category4 = new Category("Sports");
         Category category5 = new Category("Tech");
