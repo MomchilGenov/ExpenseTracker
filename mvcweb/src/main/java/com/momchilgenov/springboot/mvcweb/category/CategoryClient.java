@@ -4,10 +4,12 @@ import com.momchilgenov.springboot.mvcweb.client.EntityClient;
 import com.momchilgenov.springboot.mvcweb.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+@Service
 public class CategoryClient implements EntityClient<Category> {
 
     private final String URL_OF_FIND_ALL_CATEGORIES;
