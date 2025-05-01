@@ -63,6 +63,9 @@ public class CategoryClient implements EntityClient<Category> {
 
     @Override
     public void delete(String username, Long id) {
-
+        EntityWithUserDTO<Category> entityDto = new EntityWithUserDTO<>();
+        entityDto.setUsername(username);
+        entityDto.setId(id);
+        restTemplate.delete(URL_OF_DELETE_CATEGORY, entityDto, Void.class);
     }
 }
