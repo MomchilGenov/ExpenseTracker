@@ -44,7 +44,8 @@ public class CategoryClient implements EntityClient<Category> {
 
     @Override
     public void create(EntityWithUserDTO<Category> entityDto) {
-
+        restTemplate.postForObject(URL_OF_CREATE_CATEGORY,
+                entityDto, Void.class);
     }
 
     @Override
