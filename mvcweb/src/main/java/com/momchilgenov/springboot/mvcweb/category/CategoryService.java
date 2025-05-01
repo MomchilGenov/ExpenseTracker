@@ -20,6 +20,10 @@ public class CategoryService {
         return this.categoryClient.findAll(username);
     }
 
+    public void create(EntityWithUserDTO<Category> entityDto) {
+        this.categoryClient.create(entityDto);
+    }
+
    
 
 }
