@@ -36,4 +36,9 @@ public class CategoryController {
         return categoryService.getById(entityDto.getUsername(), entityDto.getId());
     }
 
+    @PostMapping("/update")
+    public void update(EntityWithUserDTO<CategoryDto> entityDto) {
+        categoryService.update(entityDto);
+    }
+
 }
