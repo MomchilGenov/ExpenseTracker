@@ -7,7 +7,7 @@ import java.util.List;
 public interface EntityClient<T> {
     List<T> findAll(String username);
 
-    void create(EntityWithUslerDTO<T> entityDto);
+    void create(EntityWithUserDTO<T> entityDto);
 
     T getById(String username, Long id);
 
