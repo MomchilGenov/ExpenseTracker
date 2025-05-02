@@ -120,4 +120,13 @@ public class UserDaoImpl implements UserDao {
 
         return result;
     }
+
+    @Transactional
+    @Override
+    public Long findUserIdByUsername(String username) {
+        TypedQuery<Long> query = this.entityManager.
+                createQuery("SELECT u.id FROM User u WHERE u.username=:username", Long.class);
+        query.setParameter("username", username);
+        return query.getSingleResult();
+    }
 }
