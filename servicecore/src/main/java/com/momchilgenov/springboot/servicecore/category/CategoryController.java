@@ -30,4 +30,10 @@ public class CategoryController {
         categoryService.create(entityDto);
     }
 
+
+    @PostMapping("/getById")
+    public CategoryDto getById(@RequestBody EntityWithUserDTO<CategoryDto> entityDto) {
+        return categoryService.getById(entityDto.getUsername(), entityDto.getId());
+    }
+
 }
