@@ -2,10 +2,7 @@ package com.momchilgenov.springboot.servicecore.category;
 
 import com.momchilgenov.springboot.servicecore.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,12 +33,12 @@ public class CategoryController {
         return categoryService.getById(entityDto.getUsername(), entityDto.getId());
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public void update(@RequestBody EntityWithUserDTO<CategoryDto> entityDto) {
         categoryService.update(entityDto);
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public void delete(@RequestBody EntityWithUserDTO<CategoryDto> entityDto) {
         categoryService.delete(entityDto.getUsername(), entityDto.getId());
     }
