@@ -13,6 +13,9 @@ public class Category {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     public Category() {
 
     }
@@ -31,6 +34,14 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override
