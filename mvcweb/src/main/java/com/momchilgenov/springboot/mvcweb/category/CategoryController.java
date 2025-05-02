@@ -1,6 +1,7 @@
 package com.momchilgenov.springboot.mvcweb.category;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,23 +22,10 @@ public class CategoryController {
 
     @GetMapping("")
     public String showCategoriesDashBoard(Model model) {
-        List<Category> categories = new ArrayList<>();
-        Category category1 = new Category("Travel");
-        Category category2 = new Category("Fun");
-        Category category3 = new Category("Tech");
-        Category category4 = new Category("Debts");
-        Category category5 = new Category("Other");
-        category1.setId(1L);
-        category2.setId(2L);
-        category3.setId(3L);
-        category4.setId(4L);
-        category5.setId(5L);
-        categories.add(category1);
-        categories.add(category2);
-        categories.add(category3);
-        categories.add(category4);
-        categories.add(category5);
-        model.addAttribute("categories", categories);
+        //takes the username from the authentication token
+        String currentAuthenticatedUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Category> receivedCategories = categoryService.findAll(currentAuthenticatedUser);
+        model.addAttribute("categories", receivedCategories);
         return "categories/list";
     }
 
