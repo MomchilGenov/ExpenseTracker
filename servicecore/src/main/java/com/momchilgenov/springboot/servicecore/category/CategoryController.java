@@ -37,8 +37,9 @@ public class CategoryController {
     }
 
     @PostMapping("/update")
-    public void update(EntityWithUserDTO<CategoryDto> entityDto) {
+    public void update(@RequestBody EntityWithUserDTO<CategoryDto> entityDto) {
         categoryService.update(entityDto);
     }
 
-}
+
+    }
