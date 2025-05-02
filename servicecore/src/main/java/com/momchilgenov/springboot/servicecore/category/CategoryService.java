@@ -25,4 +25,9 @@ public class CategoryService {
     }
 
 
+    public CategoryDto getById(String username, Long id) {
+        return this.categoryClient.getById(username, id);
+    }
+
+   
 }
