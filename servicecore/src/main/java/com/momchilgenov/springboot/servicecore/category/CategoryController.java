@@ -41,5 +41,9 @@ public class CategoryController {
         categoryService.update(entityDto);
     }
 
-
+    @PostMapping("/delete")
+    public void delete(@RequestBody EntityWithUserDTO<CategoryDto> entityDto) {
+        categoryService.delete(entityDto.getUsername(), entityDto.getId());
     }
+
+}
