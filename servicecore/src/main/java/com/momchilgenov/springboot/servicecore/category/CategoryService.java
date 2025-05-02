@@ -20,4 +20,9 @@ public class CategoryService {
     }
 
 
+    public void create(EntityWithUserDTO<CategoryDto> entityDto) {
+        this.categoryClient.create(entityDto);
+    }
+
+
 }
