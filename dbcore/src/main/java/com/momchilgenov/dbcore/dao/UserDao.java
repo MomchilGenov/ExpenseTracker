@@ -40,4 +40,10 @@ public interface UserDao {
      */
     UserAuthenticationStatus validateSubjectExistsAndRolesMatch(String username, List<String> roles);
 
+    /**
+     *
+     * @param username - username of a user who has sent a request
+     * @return - the id of the user with the specified username
+     */
+    Long findUserIdByUsername(String username);
 }
