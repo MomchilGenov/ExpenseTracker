@@ -4,6 +4,8 @@ import com.momchilgenov.springboot.mvcweb.client.EntityClient;
 import com.momchilgenov.springboot.mvcweb.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,11 +23,11 @@ public class CategoryClient implements EntityClient<Category> {
 
     @Autowired
     public CategoryClient(RestTemplate restTemplate,
-                          @Value("URL_OF_FIND_ALL_CATEGORIES") String URL_OF_FIND_ALL_CATEGORIES,
-                          @Value("URL_OF_CREATE_CATEGORY") String URL_OF_CREATE_CATEGORY,
-                          @Value("URL_OF_GET_CATEGORY_BY_ID") String URL_OF_GET_CATEGORY_BY_ID,
-                          @Value("URL_OF_UPDATE_CATEGORY") String URL_OF_UPDATE_CATEGORY,
-                          @Value("URL_OF_DELETE_CATEGORY") String URL_OF_DELETE_CATEGORY) {
+                          @Value("${URL_OF_FIND_ALL_CATEGORIES}") String URL_OF_FIND_ALL_CATEGORIES,
+                          @Value("${URL_OF_CREATE_CATEGORY}") String URL_OF_CREATE_CATEGORY,
+                          @Value("${URL_OF_GET_CATEGORY_BY_ID}") String URL_OF_GET_CATEGORY_BY_ID,
+                          @Value("${URL_OF_UPDATE_CATEGORY}") String URL_OF_UPDATE_CATEGORY,
+                          @Value("${URL_OF_DELETE_CATEGORY}") String URL_OF_DELETE_CATEGORY) {
         this.URL_OF_FIND_ALL_CATEGORIES = URL_OF_FIND_ALL_CATEGORIES;
         this.URL_OF_CREATE_CATEGORY = URL_OF_CREATE_CATEGORY;
         this.URL_OF_GET_CATEGORY_BY_ID = URL_OF_GET_CATEGORY_BY_ID;
@@ -38,10 +40,18 @@ public class CategoryClient implements EntityClient<Category> {
 
     @Override
     public List<Category> findAll(String username) {
-        List<Category> categories = restTemplate.postForObject(URL_OF_FIND_ALL_CATEGORIES,
-                username, List.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> requestEntity = new HttpEntity<>(username, headers);
+        ResponseEntity<List<Category>> response = restTemplate.exchange(
+                URL_OF_FIND_ALL_CATEGORIES,
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<List<Category>>() {
+                }
+        );
 
-        return categories;
+        return response.getBody();
     }
 
     @Override
