@@ -1,5 +1,6 @@
 package com.momchilgenov.springboot.servicecore.category;
 
+import com.momchilgenov.springboot.servicecore.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,5 +25,9 @@ public class CategoryController {
         return categoryService.findAll(username);
     }
 
+    @PostMapping("/create")
+    public void create(@RequestBody EntityWithUserDTO<CategoryDto> entityDto) {
+        categoryService.create(entityDto);
+    }
 
 }
