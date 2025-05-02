@@ -21,11 +21,11 @@ public class CategoryClient implements EntityClient<CategoryDto> {
 
     @Autowired
     public CategoryClient(RestTemplate restTemplate,
-                          @Value("URL_OF_FIND_ALL_CATEGORIES") String URL_OF_FIND_ALL_CATEGORIES,
-                          @Value("URL_OF_CREATE_CATEGORY") String URL_OF_CREATE_CATEGORY,
-                          @Value("URL_OF_GET_CATEGORY_BY_ID") String URL_OF_GET_CATEGORY_BY_ID,
-                          @Value("URL_OF_UPDATE_CATEGORY") String URL_OF_UPDATE_CATEGORY,
-                          @Value("URL_OF_DELETE_CATEGORY") String URL_OF_DELETE_CATEGORY) {
+                          @Value("${URL_OF_FIND_ALL_CATEGORIES}") String URL_OF_FIND_ALL_CATEGORIES,
+                          @Value("${URL_OF_CREATE_CATEGORY}") String URL_OF_CREATE_CATEGORY,
+                          @Value("${URL_OF_GET_CATEGORY_BY_ID}") String URL_OF_GET_CATEGORY_BY_ID,
+                          @Value("${URL_OF_UPDATE_CATEGORY}") String URL_OF_UPDATE_CATEGORY,
+                          @Value("${URL_OF_DELETE_CATEGORY}") String URL_OF_DELETE_CATEGORY) {
         this.URL_OF_FIND_ALL_CATEGORIES = URL_OF_FIND_ALL_CATEGORIES;
         this.URL_OF_CREATE_CATEGORY = URL_OF_CREATE_CATEGORY;
         this.URL_OF_GET_CATEGORY_BY_ID = URL_OF_GET_CATEGORY_BY_ID;
