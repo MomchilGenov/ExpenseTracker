@@ -70,4 +70,13 @@ public class CategoryController {
 
     }
 
+
+    @DeleteMapping("/delete")
+    public void deleteCategory(@RequestBody EntityWithUserDto<CategoryDto> entityDto) {
+        String username = entityDto.getUsername();
+        Long entityId = entityDto.getId();
+        System.out.println("Delete category with id = " + entityId + "for user = " + username);
+
+    }
+
 }
