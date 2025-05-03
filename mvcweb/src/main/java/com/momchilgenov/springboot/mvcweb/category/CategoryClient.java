@@ -78,6 +78,15 @@ public class CategoryClient implements EntityClient<Category> {
         EntityWithUserDTO<Category> entityDto = new EntityWithUserDTO<>();
         entityDto.setUsername(username);
         entityDto.setId(id);
-        restTemplate.delete(URL_OF_DELETE_CATEGORY, entityDto, Void.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<EntityWithUserDTO<Category>> requestEntity = new HttpEntity<>(entityDto, headers);
+        ResponseEntity<Void> response = restTemplate.exchange(
+                URL_OF_DELETE_CATEGORY,
+                HttpMethod.DELETE,
+                requestEntity,
+                Void.class
+        );
+
     }
 }
