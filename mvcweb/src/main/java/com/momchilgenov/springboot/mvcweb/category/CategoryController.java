@@ -69,6 +69,10 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public String deleteCategory(@PathVariable long id) {
         System.out.println("Deleting category with id = " + id);
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //have method return a response to handle errors
+        categoryService.delete(username, id);
+
         return "redirect:/api/v1/categories";
     }
 
