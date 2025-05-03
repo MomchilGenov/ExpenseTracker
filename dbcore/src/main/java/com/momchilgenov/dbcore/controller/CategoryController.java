@@ -54,4 +54,11 @@ public class CategoryController {
         return dummyDto;
     }
 
+    @PostMapping("/create")
+    public void createCategory(@RequestBody EntityWithUserDto<CategoryDto> entityDto){
+        String username = entityDto.getUsername();
+        CategoryDto categoryDto = entityDto.getEntity();
+        System.out.println("Received category to create has name = " + categoryDto.getName() + " sent by = " + username);
+    }
+
 }
