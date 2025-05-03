@@ -3,10 +3,7 @@ package com.momchilgenov.dbcore.controller;
 import com.momchilgenov.dbcore.dto.CategoryDto;
 import com.momchilgenov.dbcore.dto.EntityWithUserDto;
 import com.momchilgenov.dbcore.entity.Category;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,14 +48,26 @@ public class CategoryController {
         Long entityId = entityDto.getId();
         System.out.println("Received category to findById has id = " + entityId + " sent by = " + username);
         CategoryDto dummyDto = new CategoryDto("This is a dummy response");
+        dummyDto.setId(entityId);
         return dummyDto;
     }
 
     @PostMapping("/create")
-    public void createCategory(@RequestBody EntityWithUserDto<CategoryDto> entityDto){
+    public void createCategory(@RequestBody EntityWithUserDto<CategoryDto> entityDto) {
         String username = entityDto.getUsername();
         CategoryDto categoryDto = entityDto.getEntity();
         System.out.println("Received category to create has name = " + categoryDto.getName() + " sent by = " + username);
+    }
+
+    @PutMapping("/update")
+    public void updateCategory(@RequestBody EntityWithUserDto<CategoryDto> entityDto) {
+        String username = entityDto.getUsername();
+        Long entityId = entityDto.getId();
+        CategoryDto categoryDto = entityDto.getEntity();
+        System.out.println("Update category with id = " + entityId + " to new name = " +
+                categoryDto.getName() + "for user = " + username);
+
+
     }
 
 }
