@@ -4,6 +4,7 @@ import com.momchilgenov.springboot.servicecore.client.EntityClient;
 import com.momchilgenov.springboot.servicecore.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -68,7 +69,16 @@ public class CategoryClient implements EntityClient<CategoryDto> {
         EntityWithUserDTO<CategoryDto> entityDto = new EntityWithUserDTO<>();
         entityDto.setUsername(username);
         entityDto.setId(id);
-        restTemplate.delete(URL_OF_DELETE_CATEGORY, entityDto, Void.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<EntityWithUserDTO<CategoryDto>> requestEntity = new HttpEntity<>(entityDto, headers);
+        ResponseEntity<Void> response = restTemplate.exchange(
+                URL_OF_DELETE_CATEGORY,
+                HttpMethod.DELETE,
+                requestEntity,
+                Void.class
+        );
+
     }
 
 }
