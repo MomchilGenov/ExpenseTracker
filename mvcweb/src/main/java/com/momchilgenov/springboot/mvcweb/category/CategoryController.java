@@ -1,5 +1,6 @@
 package com.momchilgenov.springboot.mvcweb.category;
 
+import com.momchilgenov.springboot.mvcweb.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,11 @@ public class CategoryController {
 
     @PostMapping("")
     public String saveCategory(@ModelAttribute Category category) {
-        System.out.println("Created category = " + category.getName());
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        EntityWithUserDTO<Category> entityDto = new EntityWithUserDTO<>();
+        entityDto.setUsername(username);
+        entityDto.setEntity(category);
+        categoryService.create(entityDto);
         return "redirect:/api/v1/categories";
     }
 
