@@ -45,4 +45,13 @@ public class CategoryController {
         return categories;
     }
 
+    @PostMapping("/getById")
+    public CategoryDto getById(@RequestBody EntityWithUserDto<CategoryDto> entityDto) {
+        String username = entityDto.getUsername();
+        Long entityId = entityDto.getId();
+        System.out.println("Received category to findById has id = " + entityId + " sent by = " + username);
+        CategoryDto dummyDto = new CategoryDto("This is a dummy response");
+        return dummyDto;
+    }
+
 }
