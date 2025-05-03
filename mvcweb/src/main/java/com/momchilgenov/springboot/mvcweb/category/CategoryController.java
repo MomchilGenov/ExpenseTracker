@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -39,9 +38,9 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public String editCategory(@PathVariable Long id, Model model) {
-        Category fetchedCategory = new Category("I was in the db");
-        model.addAttribute("category", fetchedCategory);
-        fetchedCategory.setId(42L);
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Category category = categoryService.getById(username, id);
+        model.addAttribute("category", category);
         return "categories/category_form";
     }
 
