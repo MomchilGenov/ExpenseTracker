@@ -59,6 +59,15 @@ public class CategoryController {
     public String updateCategory(@PathVariable Long id, @ModelAttribute Category category) {
         System.out.println("Id of edited category = " + id);
         System.out.println("Category updated name = " + category.getName());
+
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        EntityWithUserDTO<Category> entityDto = new EntityWithUserDTO<>();
+        entityDto.setId(id);
+        entityDto.setUsername(username);
+        entityDto.setEntity(category);
+        categoryService.update(entityDto);
+
+
         return "redirect:/api/v1/categories";
     }
 
