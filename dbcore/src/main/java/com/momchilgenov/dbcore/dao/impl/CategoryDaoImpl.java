@@ -26,11 +26,21 @@ public class CategoryDaoImpl implements CategoryDao {
         return this.entityManager.find(Category.class, id);
     }
 
+    @Override
+    public Category findById(Long categoryId, Long userId) {
+        return null;
+    }
+
     @Transactional
     @Override
     public List<Category> findAll() {
         TypedQuery<Category> query = entityManager.createQuery("FROM Category", Category.class);
         return query.getResultList();
+    }
+
+    @Override
+    public List<Category> findAllByUserId(Long userId) {
+        return null;
     }
 
     @Transactional
@@ -39,9 +49,19 @@ public class CategoryDaoImpl implements CategoryDao {
         entityManager.persist(category);
     }
 
+    @Override
+    public void saveForUser(Category category, Long userId) {
+
+    }
+
     @Transactional
     @Override
     public Category update(Category category) {
         return this.entityManager.merge(category);
+    }
+
+    @Override
+    public Category updateForUser(Category category, Long userId) {
+        return null;
     }
 }
