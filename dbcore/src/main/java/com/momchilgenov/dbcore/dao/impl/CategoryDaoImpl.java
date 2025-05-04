@@ -43,9 +43,13 @@ public class CategoryDaoImpl implements CategoryDao {
         return query.getResultList();
     }
 
+    @Transactional
     @Override
     public List<Category> findAllByUserId(Long userId) {
-        return null;
+        TypedQuery<Category> typedQuery = this.entityManager.
+                createQuery("FROM Category c WHERE c.userId=:userId", Category.class);
+        typedQuery.setParameter("userId", userId);
+        return typedQuery.getResultList();
     }
 
     @Transactional
