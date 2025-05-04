@@ -43,7 +43,12 @@ public class CategoryService {
     }
 
     public void update(CategoryDto categoryDto, String username) {
-
+        Long userId = userDao.findUserIdByUsername(username);
+        Category category = new Category();
+        category.setId(categoryDto.getId());
+        category.setName(categoryDto.getName());
+        category.setUserId(userId);
+        categoryDao.updateForUser(category, userId);
     }
 
     public void delete(Long categoryId) {
