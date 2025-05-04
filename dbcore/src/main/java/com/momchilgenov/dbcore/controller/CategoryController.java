@@ -5,9 +5,13 @@ import com.momchilgenov.dbcore.dto.EntityWithUserDto;
 import com.momchilgenov.dbcore.entity.Category;
 import com.momchilgenov.dbcore.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,10 +49,7 @@ public class CategoryController {
         String username = entityDto.getUsername();
         Long entityId = entityDto.getId();
         CategoryDto categoryDto = entityDto.getEntity();
-        System.out.println("Update category with id = " + entityId + " to new name = " +
-                categoryDto.getName() + "for user = " + username);
-
-
+        categoryService.update(categoryDto, username);
     }
 
 
