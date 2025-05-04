@@ -73,8 +73,10 @@ public class CategoryDaoImpl implements CategoryDao {
         return this.entityManager.merge(category);
     }
 
+    @Transactional
     @Override
     public Category updateForUser(Category category, Long userId) {
-        return null;
+        category.setUserId(userId);
+        return this.entityManager.merge(category);
     }
 }
