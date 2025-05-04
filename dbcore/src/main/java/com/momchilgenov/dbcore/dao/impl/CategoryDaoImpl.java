@@ -26,6 +26,7 @@ public class CategoryDaoImpl implements CategoryDao {
         return this.entityManager.find(Category.class, id);
     }
 
+    @Transactional
     @Override
     public Category findById(Long categoryId, Long userId) {
         TypedQuery<Category> typedQuery = this.entityManager.
