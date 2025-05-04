@@ -22,7 +22,8 @@ public class CategoryService {
     }
 
     public List<Category> findAll(String username) {
-        return null;
+        Long userId = userDao.findUserIdByUsername(username);
+        return categoryDao.findAllByUserId(userId);
     }
 
     public CategoryDto getById(Long categoryId, String username) {
