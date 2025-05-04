@@ -34,8 +34,12 @@ public class CategoryService {
         return categoryDto;
     }
 
-    public void save(CategoryDto category, String username) {
-
+    public void save(CategoryDto categoryDto, String username) {
+        Long userId = userDao.findUserIdByUsername(username);
+        Category category = new Category();
+        category.setName(categoryDto.getName());
+        category.setUserId(userId);
+        categoryDao.saveForUser(category, userId);
     }
 
     public void update(CategoryDto categoryDto, String username) {
