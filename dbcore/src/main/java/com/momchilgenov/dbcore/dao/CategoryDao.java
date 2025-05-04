@@ -23,5 +23,5 @@ public interface CategoryDao {
 
     Category updateForUser(Category category, Long userId);
 
-
+    void delete(Long categoryId);
 }
