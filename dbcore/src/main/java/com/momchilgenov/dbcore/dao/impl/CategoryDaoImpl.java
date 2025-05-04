@@ -79,4 +79,14 @@ public class CategoryDaoImpl implements CategoryDao {
         category.setUserId(userId);
         return this.entityManager.merge(category);
     }
+
+    @Transactional
+    @Override
+    public void delete(Long categoryId) {
+        TypedQuery<Category> query = this.entityManager
+                .createQuery("FROM Category c WHERE c.id=:categoryId", Category.class);
+        query.setParameter("categoryId", categoryId);
+        Category category = query.getSingleResult();
+        this.entityManager.remove(category);
+    }
 }
