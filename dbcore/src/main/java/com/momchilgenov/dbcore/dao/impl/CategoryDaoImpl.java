@@ -58,9 +58,13 @@ public class CategoryDaoImpl implements CategoryDao {
         entityManager.persist(category);
     }
 
+    @Transactional
     @Override
     public void saveForUser(Category category, Long userId) {
-
+        Category newCategory = new Category();
+        newCategory.setUserId(userId);
+        newCategory.setName(category.getName());
+        this.entityManager.persist(newCategory);
     }
 
     @Transactional
