@@ -1,13 +1,22 @@
 package com.momchilgenov.dbcore.service;
 
+import com.momchilgenov.dbcore.dao.CategoryDao;
 import com.momchilgenov.dbcore.dto.CategoryDto;
 import com.momchilgenov.dbcore.entity.Category;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class CategoryService {
+    private final CategoryDao categoryDao;
+
+    @Autowired
+    public CategoryService(CategoryDao categoryDao) {
+        this.categoryDao = categoryDao;
+    }
+
     public List<Category> findAll(String username) {
         return null;
     }
@@ -25,6 +34,6 @@ public class CategoryService {
     }
 
     public void delete(Long categoryId) {
-        
+
     }
 }
