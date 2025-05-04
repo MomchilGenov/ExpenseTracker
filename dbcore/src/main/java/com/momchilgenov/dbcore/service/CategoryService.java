@@ -52,6 +52,6 @@ public class CategoryService {
     }
 
     public void delete(Long categoryId) {
-
+        this.categoryDao.delete(categoryId);
     }
 }
