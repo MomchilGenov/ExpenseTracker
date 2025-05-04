@@ -27,7 +27,11 @@ public class CategoryService {
     }
 
     public CategoryDto getById(Long categoryId, String username) {
-        return null;
+        Long userId = userDao.findUserIdByUsername(username);
+        Category foundCategory = categoryDao.findById(categoryId, userId);
+        CategoryDto categoryDto = new CategoryDto(foundCategory.getName());
+        categoryDto.setId(foundCategory.getId());
+        return categoryDto;
     }
 
     public void save(CategoryDto category, String username) {
