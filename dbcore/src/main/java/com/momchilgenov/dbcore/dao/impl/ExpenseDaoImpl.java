@@ -80,12 +80,13 @@ public class ExpenseDaoImpl implements ExpenseDao {
     @Override
     @Transactional
     public Expense updateForUser(Expense expense, Long userId) {
-        return null;
+        return entityManager.merge(expense);
     }
 
     @Override
     @Transactional
     public void delete(Long expenseId) {
-
+        Expense expense = entityManager.find(Expense.class, expenseId);
+        entityManager.remove(expense);
     }
 }
