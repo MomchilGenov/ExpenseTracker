@@ -27,10 +27,20 @@ public class ExpenseDaoImpl implements ExpenseDao {
     }
 
     @Override
+    public Expense findById(Long expenseId, Long userId) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public List<Expense> findAll() {
         TypedQuery<Expense> query = entityManager.createQuery("FROM Expense", Expense.class);
         return query.getResultList();
+    }
+
+    @Override
+    public List<Expense> findAllByUserId(Long userId) {
+        return null;
     }
 
     @Override
@@ -40,8 +50,23 @@ public class ExpenseDaoImpl implements ExpenseDao {
     }
 
     @Override
+    public void saveForUser(Expense expense, Long userId) {
+
+    }
+
+    @Override
     @Transactional
     public Expense update(Expense expense) {
         return this.entityManager.merge(expense);
+    }
+
+    @Override
+    public Expense updateForUser(Expense expense, Long userId) {
+        return null;
+    }
+
+    @Override
+    public void delete(Long expenseId) {
+
     }
 }
