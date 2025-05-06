@@ -47,7 +47,10 @@ public class ExpenseDaoImpl implements ExpenseDao {
     @Override
     @Transactional
     public List<Expense> findAllByUserId(Long userId) {
-        return null;
+        TypedQuery<Expense> query = entityManager
+                .createQuery("FROM Expense e WHERE e.expenseCreator.id=:userId", Expense.class);
+        query.setParameter("userId", userId);
+        return query.getResultList();
     }
 
     @Override
