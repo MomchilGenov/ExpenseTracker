@@ -1,6 +1,7 @@
 package com.momchilgenov.dbcore.dao.impl;
 
 import com.momchilgenov.dbcore.dao.ExpenseDao;
+import com.momchilgenov.dbcore.dao.UserDao;
 import com.momchilgenov.dbcore.entity.Expense;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -14,10 +15,12 @@ import java.util.List;
 public class ExpenseDaoImpl implements ExpenseDao {
 
     private final EntityManager entityManager;
+    private final UserDao userDao;
 
     @Autowired
-    public ExpenseDaoImpl(EntityManager entityManager) {
+    public ExpenseDaoImpl(EntityManager entityManager,UserDao userDao) {
         this.entityManager = entityManager;
+        this.userDao=userDao;
     }
 
     @Override
@@ -62,7 +65,6 @@ public class ExpenseDaoImpl implements ExpenseDao {
     @Override
     @Transactional
     public void saveForUser(Expense expense, Long userId) {
-
     }
 
     @Override
