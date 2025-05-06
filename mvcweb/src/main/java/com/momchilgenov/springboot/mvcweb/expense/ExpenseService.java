@@ -1,12 +1,20 @@
 package com.momchilgenov.springboot.mvcweb.expense;
 
 import com.momchilgenov.springboot.mvcweb.dto.EntityWithUserDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ExpenseService {
+
+    private final ExpenseClient expenseClient;
+
+    @Autowired
+    public ExpenseService(ExpenseClient expenseClient) {
+        this.expenseClient = expenseClient;
+    }
 
     public List<Expense> findAll(String username) {
         return null;
