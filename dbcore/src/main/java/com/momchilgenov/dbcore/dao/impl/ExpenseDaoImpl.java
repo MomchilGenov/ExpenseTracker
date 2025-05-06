@@ -26,9 +26,15 @@ public class ExpenseDaoImpl implements ExpenseDao {
         return this.entityManager.find(Expense.class, id);
     }
 
+
     @Override
+    @Transactional
     public Expense findById(Long expenseId, Long userId) {
-        return null;
+        TypedQuery<Expense> query = entityManager
+                .createQuery("FROM Expense e WHERE e.id=:expenseId AND e.expenseCreator.id=:userId", Expense.class);
+        query.setParameter("expenseId", expenseId);
+        query.setParameter("userId", userId);
+        return query.getSingleResult();
     }
 
     @Override
@@ -39,6 +45,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
     }
 
     @Override
+    @Transactional
     public List<Expense> findAllByUserId(Long userId) {
         return null;
     }
@@ -50,6 +57,7 @@ public class ExpenseDaoImpl implements ExpenseDao {
     }
 
     @Override
+    @Transactional
     public void saveForUser(Expense expense, Long userId) {
 
     }
@@ -61,11 +69,13 @@ public class ExpenseDaoImpl implements ExpenseDao {
     }
 
     @Override
+    @Transactional
     public Expense updateForUser(Expense expense, Long userId) {
         return null;
     }
 
     @Override
+    @Transactional
     public void delete(Long expenseId) {
 
     }
