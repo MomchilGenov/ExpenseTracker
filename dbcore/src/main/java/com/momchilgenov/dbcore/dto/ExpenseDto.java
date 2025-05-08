@@ -1,5 +1,7 @@
 package com.momchilgenov.dbcore.dto;
 
+import com.momchilgenov.dbcore.entity.Expense;
+
 import java.time.LocalDate;
 
 public class ExpenseDto {
@@ -18,6 +20,14 @@ public class ExpenseDto {
         this.amount = amount;
         this.date = date;
         this.category = category;
+    }
+    public ExpenseDto(Expense expense) {
+        this.id = expense.getId();
+        this.name = expense.getName();
+        this.amount = expense.getAmount();
+        this.date = expense.getDate();
+        this.category = new CategoryDto(expense.getCategory().getName());
+        this.category.setId(expense.getId());
     }
 
     public long getId() {
