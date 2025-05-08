@@ -5,7 +5,11 @@ import com.momchilgenov.springboot.mvcweb.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,7 +50,7 @@ public class ExpenseClient implements EntityClient<Expense> {
         HttpEntity<String> requestEntity = new HttpEntity<>(username, headers);
         ResponseEntity<List<Expense>> response = restTemplate.exchange(
                 URL_OF_FIND_ALL_EXPENSES,
-                HttpMethod.GET,
+                HttpMethod.POST, //either this or we need to send the username as a url query param which for sec reason is bad
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }
