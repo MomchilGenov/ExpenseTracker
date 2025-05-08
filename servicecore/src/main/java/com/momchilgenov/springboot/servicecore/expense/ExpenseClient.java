@@ -55,6 +55,8 @@ public class ExpenseClient implements EntityClient<ExpenseDto> {
 
     @Override
     public void create(EntityWithUserDTO<ExpenseDto> entityDto) {
+        restTemplate.postForObject(URL_OF_CREATE_EXPENSE,
+                entityDto, Void.class);
 
     }
 
