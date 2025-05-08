@@ -1,5 +1,6 @@
 package com.momchilgenov.dbcore.dao;
 
+import com.momchilgenov.dbcore.dto.ExpenseDto;
 import com.momchilgenov.dbcore.entity.Category;
 import com.momchilgenov.dbcore.entity.Expense;
 
@@ -13,7 +14,7 @@ public interface ExpenseDao {
 
     List<Expense> findAll();
 
-    List<Expense> findAllByUserId(Long userId);
+    List<ExpenseDto> findAllByUserId(Long userId);
 
     void save(Expense expense);
 
