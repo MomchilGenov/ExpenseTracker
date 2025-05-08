@@ -21,6 +21,7 @@ public class ExpenseService {
     }
 
     public void create(EntityWithUserDTO<Expense> entityDto) {
+        expenseClient.create(entityDto);
     }
 
     public Expense getById(String username, Long id) {
