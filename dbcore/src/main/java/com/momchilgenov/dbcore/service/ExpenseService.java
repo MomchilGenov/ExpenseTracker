@@ -68,6 +68,7 @@ public class ExpenseService {
     }
 
     public void delete(Long expenseId) {
+        expenseDao.delete(expenseId);
     }
 
 
