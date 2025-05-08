@@ -2,9 +2,16 @@ package com.momchilgenov.springboot.mvcweb.expense;
 
 import com.momchilgenov.springboot.mvcweb.category.Category;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,37 +30,9 @@ public class ExpenseController {
 
     @GetMapping("")
     public String showExpenseDashboard(Model model) {
-        var today = LocalDate.now();
-        var category = new Category("Clothes");
-        List<Expense> expenses = new ArrayList<>();
-        expenses.add(new Expense("Shoes", 55, today, category));
-        expenses.add(new Expense("Shirt", 25, today, category));
-        expenses.add(new Expense("Shirt", 35, today, category));
-        expenses.add(new Expense("Blue shirt", 25, today, category));
-        expenses.add(new Expense("Trousers", 40, today, category));
-        expenses.add(new Expense("Glasses", 80, today, category));
-        expenses.add(new Expense("T-shirt", 20, today, category));
-        expenses.add(new Expense("Belt", 15, today, category));
-        expenses.add(new Expense("Green jacket", 90, today, category));
-        expenses.add(new Expense("Yellow hat", 5, today, category));
-        expenses.add(new Expense("Red-dotted socks", 10, today, category));
-        expenses.add(new Expense("Blue tie", 12, today, category));
-
-        expenses.add(new Expense("Green jacket", 90, today, category));
-        expenses.add(new Expense("Yellow hat", 5, today, category));
-        expenses.add(new Expense("Red-dotted socks", 10, today, category));
-        expenses.add(new Expense("Blue tie", 12, today, category));
-
-        expenses.add(new Expense("Green jacket", 90, today, category));
-        expenses.add(new Expense("Yellow hat", 5, today, category));
-        expenses.add(new Expense("Red-dotted socks", 10, today, category));
-        expenses.add(new Expense("Blue tie", 12, today, category));
-
-        expenses.add(new Expense("Green jacket", 90, today, category));
-        expenses.add(new Expense("Yellow hat", 5, today, category));
-        expenses.add(new Expense("Red-dotted socks", 10, today, category));
-        expenses.add(new Expense("Blue tie", 12, today, category));
-        model.addAttribute("expenses", expenses);
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Expense> expenseList = expenseService.findAll(username);
+        model.addAttribute("expenses", expenseList);
         return "expenses/list";
     }
 
@@ -81,7 +60,7 @@ public class ExpenseController {
         category2.setId(18L);
         Expense expense = new Expense("Testing edit page", 800836,
                 LocalDate.now(), category1);
-        expense.setId(123);
+        expense.setId(123L);
 
         Category category3 = new Category("Loan");
         Category category4 = new Category("Sports");
