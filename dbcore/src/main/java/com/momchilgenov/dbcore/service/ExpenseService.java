@@ -47,9 +47,7 @@ public class ExpenseService {
 
     public void save(ExpenseDto expenseDto, String username) {
         Long userId = userDao.findUserIdByUsername(username);
-        User user = userDao.findById(userId);
         Expense expense = new Expense();
-        expense.setExpenseCreator(user);
         expense.setDate(expenseDto.getDate());
         expense.setName(expenseDto.getName());
         expense.setAmount(expenseDto.getAmount());
