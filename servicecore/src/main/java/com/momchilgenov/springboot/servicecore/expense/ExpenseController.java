@@ -21,7 +21,9 @@ public class ExpenseController {
         return expenseService.getById(entityDto.getUsername(), entityDto.getId());
     }
 
-    @GetMapping("/findAll")
+    //get http requests get their bodies removed or ignored from Spring and sending the username as a query param
+    //with our app is a security breach, because users have unique usernames they use to login
+    @PostMapping("/findAll")
     public List<ExpenseDto> findAll(@RequestBody String username) {
         return expenseService.findAll(username);
     }
