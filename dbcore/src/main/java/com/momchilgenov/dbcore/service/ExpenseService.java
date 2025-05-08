@@ -7,7 +7,6 @@ import com.momchilgenov.dbcore.dto.CategoryDto;
 import com.momchilgenov.dbcore.dto.ExpenseDto;
 import com.momchilgenov.dbcore.entity.Category;
 import com.momchilgenov.dbcore.entity.Expense;
-import com.momchilgenov.dbcore.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,7 @@ public class ExpenseService {
         this.categoryDao = categoryDao;
     }
 
-    public List<Expense> findAll(String username) {
+    public List<ExpenseDto> findAll(String username) {
         Long userId = userDao.findUserIdByUsername(username);
         return expenseDao.findAllByUserId(userId);
     }
