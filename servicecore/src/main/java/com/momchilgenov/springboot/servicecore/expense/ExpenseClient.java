@@ -45,7 +45,7 @@ public class ExpenseClient implements EntityClient<ExpenseDto> {
         HttpEntity<String> requestEntity = new HttpEntity<>(username, headers);
         ResponseEntity<List<ExpenseDto>> response = restTemplate.exchange(
                 URL_OF_FIND_ALL_EXPENSES,
-                HttpMethod.GET,
+                HttpMethod.POST , //this or send username as query param which is bad for security as it is a UID
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }
