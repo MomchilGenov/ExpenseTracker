@@ -25,7 +25,7 @@ public class ExpenseService {
     }
 
     public Expense getById(String username, Long id) {
-        return null;
+        return expenseClient.getById(username, id);
     }
 
     public void update(EntityWithUserDTO<Expense> entityDto) {
