@@ -60,7 +60,21 @@ public class ExpenseClient implements EntityClient<ExpenseDto> {
 
     @Override
     public ExpenseDto getById(String username, Long id) {
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        EntityWithUserDTO<ExpenseDto> entityDto = new EntityWithUserDTO<>();
+        ExpenseDto expenseDto = new ExpenseDto();
+        expenseDto.setId(id);
+        entityDto.setEntity(expenseDto);
+        entityDto.setUsername(username);
+        HttpEntity<EntityWithUserDTO<ExpenseDto>> requestEntity = new HttpEntity<>(entityDto, headers);
+        ResponseEntity<ExpenseDto> response = restTemplate.exchange(
+                URL_OF_GET_EXPENSE_BY_ID,
+                HttpMethod.GET,
+                requestEntity,
+                ExpenseDto.class
+        );
+        return response.getBody();
     }
 
     @Override
