@@ -4,6 +4,8 @@ import com.momchilgenov.springboot.mvcweb.client.EntityClient;
 import com.momchilgenov.springboot.mvcweb.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -39,7 +41,17 @@ public class ExpenseClient implements EntityClient<Expense> {
 
     @Override
     public List<Expense> findAll(String username) {
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> requestEntity = new HttpEntity<>(username, headers);
+        ResponseEntity<List<Expense>> response = restTemplate.exchange(
+                URL_OF_FIND_ALL_EXPENSES,
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        return response.getBody();
     }
 
     @Override
