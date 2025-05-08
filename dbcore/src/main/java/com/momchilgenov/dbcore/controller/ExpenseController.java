@@ -2,7 +2,6 @@ package com.momchilgenov.dbcore.controller;
 
 import com.momchilgenov.dbcore.dto.EntityWithUserDto;
 import com.momchilgenov.dbcore.dto.ExpenseDto;
-import com.momchilgenov.dbcore.entity.Expense;
 import com.momchilgenov.dbcore.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,8 +25,9 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-    @GetMapping("/findAll")
-    public List<Expense> findAll(@RequestBody String username) {
+    //post mapped, because otherwise we need to send the username as a query param, which for security reasons is bad
+    @PostMapping("/findAll")
+    public List<ExpenseDto> findAll(@RequestBody String username) {
         return expenseService.findAll(username);
     }
 
