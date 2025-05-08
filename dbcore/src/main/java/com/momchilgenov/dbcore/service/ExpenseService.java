@@ -21,7 +21,8 @@ public class ExpenseService {
     }
 
     public List<Expense> findAll(String username) {
-        return null;
+        Long userId = userDao.findUserIdByUsername(username);
+        return expenseDao.findAllByUserId(userId);
     }
 
     public ExpenseDto getById(Long expenseId, String username) {
