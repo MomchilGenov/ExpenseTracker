@@ -33,7 +33,7 @@ public class ExpenseService {
     }
 
     public void delete(String username, Long id) {
-
+        expenseClient.delete(username, id);
     }
 
 
