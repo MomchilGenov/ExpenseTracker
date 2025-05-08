@@ -2,6 +2,7 @@ package com.momchilgenov.dbcore.dao.impl;
 
 import com.momchilgenov.dbcore.dao.ExpenseDao;
 import com.momchilgenov.dbcore.dao.UserDao;
+import com.momchilgenov.dbcore.dto.ExpenseDto;
 import com.momchilgenov.dbcore.entity.Expense;
 import com.momchilgenov.dbcore.entity.User;
 import jakarta.persistence.EntityManager;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ExpenseDaoImpl implements ExpenseDao {
@@ -50,11 +52,16 @@ public class ExpenseDaoImpl implements ExpenseDao {
 
     @Override
     @Transactional
-    public List<Expense> findAllByUserId(Long userId) {
+    public List<ExpenseDto> findAllByUserId(Long userId) {
         TypedQuery<Expense> query = entityManager
                 .createQuery("FROM Expense e WHERE e.expenseCreator.id=:userId", Expense.class);
         query.setParameter("userId", userId);
-        return query.getResultList();
+        //if we do not use the dto, but instead the entity class, when Jackson tries to
+        //serialize the list of expenses, it serializes the first expense and then tries
+        //to serialize the user field which has an expense field and thus an endless recursion
+        //due to a circular dependency, since they are related db entities, hence the need for dto conversion
+        //if we do not, we will essentially receive a single incomplete result of an expense
+        return query.getResultList().stream().map(ExpenseDto::new).collect(Collectors.toList());
     }
 
     @Override
