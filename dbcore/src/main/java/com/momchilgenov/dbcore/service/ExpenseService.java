@@ -57,6 +57,14 @@ public class ExpenseService {
     }
 
     public void update(ExpenseDto expenseDto, String username) {
+        Long userId = userDao.findUserIdByUsername(username);
+        Expense expense = expenseDao.findById(expenseDto.getId(), userId);
+        expense.setDate(expenseDto.getDate());
+        expense.setName(expenseDto.getName());
+        expense.setAmount(expenseDto.getAmount());
+        Category category = categoryDao.findById(expenseDto.getCategory().getId());
+        expense.setCategory(category);
+        expenseDao.updateForUser(expense, userId);
     }
 
     public void delete(Long expenseId) {
