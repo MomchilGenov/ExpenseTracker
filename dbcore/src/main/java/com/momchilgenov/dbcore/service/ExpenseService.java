@@ -4,7 +4,9 @@ import com.momchilgenov.dbcore.dao.ExpenseDao;
 import com.momchilgenov.dbcore.dao.UserDao;
 import com.momchilgenov.dbcore.dto.CategoryDto;
 import com.momchilgenov.dbcore.dto.ExpenseDto;
+import com.momchilgenov.dbcore.entity.Category;
 import com.momchilgenov.dbcore.entity.Expense;
+import com.momchilgenov.dbcore.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,16 @@ public class ExpenseService {
     }
 
     public void save(ExpenseDto expenseDto, String username) {
+        Long userId = userDao.findUserIdByUsername(username);
+        User user = userDao.findById(userId);
+        Expense expense = new Expense();
+        expense.setExpenseCreator(user);
+        expense.setDate(expenseDto.getDate());
+        expense.setName(expenseDto.getName());
+        expense.setAmount(expenseDto.getAmount());
+        Category category = categoryDao.findById(expenseDto.getCategory().getId());
+        expense.setCategory(category);
+        expenseDao.saveForUser(expense, userId);
     }
 
     public void update(ExpenseDto expenseDto, String username) {
