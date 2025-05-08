@@ -51,6 +51,7 @@ public class ExpenseClient implements EntityClient<Expense> {
         ResponseEntity<List<Expense>> response = restTemplate.exchange(
                 URL_OF_FIND_ALL_EXPENSES,
                 HttpMethod.POST, //either this or we need to send the username as a url query param which for sec reason is bad
+                //spring by default removes/doesn't  look at the body of a get request
                 requestEntity,
                 new ParameterizedTypeReference<>() {
                 }
