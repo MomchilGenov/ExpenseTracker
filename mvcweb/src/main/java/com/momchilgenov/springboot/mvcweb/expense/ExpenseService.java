@@ -17,7 +17,7 @@ public class ExpenseService {
     }
 
     public List<Expense> findAll(String username) {
-        return null;
+        return expenseClient.findAll(username);
     }
 
     public void create(EntityWithUserDTO<Expense> entityDto) {
