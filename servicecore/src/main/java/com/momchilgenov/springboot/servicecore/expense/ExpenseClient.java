@@ -86,6 +86,19 @@ public class ExpenseClient implements EntityClient<ExpenseDto> {
 
     @Override
     public void delete(String username, Long id) {
+        EntityWithUserDTO<ExpenseDto> entityDto = new EntityWithUserDTO<>();
+        entityDto.setUsername(username);
+        entityDto.setId(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<EntityWithUserDTO<ExpenseDto>> requestEntity = new HttpEntity<>(entityDto, headers);
+        restTemplate.exchange(
+                URL_OF_DELETE_EXPENSE,
+                HttpMethod.DELETE,
+                requestEntity,
+                Void.class
+        );
+
 
     }
 }
