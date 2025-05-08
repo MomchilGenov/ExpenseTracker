@@ -29,7 +29,7 @@ public class ExpenseService {
     }
 
     public void update(EntityWithUserDTO<Expense> entityDto) {
-
+        expenseClient.update(entityDto);
     }
 
     public void delete(String username, Long id) {
