@@ -1,5 +1,6 @@
 package com.momchilgenov.dbcore.service;
 
+import com.momchilgenov.dbcore.dao.CategoryDao;
 import com.momchilgenov.dbcore.dao.ExpenseDao;
 import com.momchilgenov.dbcore.dao.UserDao;
 import com.momchilgenov.dbcore.dto.CategoryDto;
@@ -16,11 +17,13 @@ import java.util.List;
 public class ExpenseService {
     private final ExpenseDao expenseDao;
     private final UserDao userDao;
+    private final CategoryDao categoryDao;
 
     @Autowired
-    public ExpenseService(ExpenseDao expenseDao, UserDao userDao) {
+    public ExpenseService(ExpenseDao expenseDao, UserDao userDao, CategoryDao categoryDao) {
         this.expenseDao = expenseDao;
         this.userDao = userDao;
+        this.categoryDao = categoryDao;
     }
 
     public List<Expense> findAll(String username) {
