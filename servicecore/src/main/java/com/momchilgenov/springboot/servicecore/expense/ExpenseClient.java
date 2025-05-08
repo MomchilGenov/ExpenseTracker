@@ -40,7 +40,17 @@ public class ExpenseClient implements EntityClient<ExpenseDto> {
 
     @Override
     public List<ExpenseDto> findAll(String username) {
-
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> requestEntity = new HttpEntity<>(username, headers);
+        ResponseEntity<List<ExpenseDto>> response = restTemplate.exchange(
+                URL_OF_FIND_ALL_EXPENSES,
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        return response.getBody();
     }
 
     @Override
