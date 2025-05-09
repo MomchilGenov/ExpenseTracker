@@ -85,10 +85,9 @@ public class AuthenticationController {
     }
 
     @GetMapping("/homepage")
-    public String showHomepage() {
-        System.out.println("In homepage");
+    public String showHomepage(Model model) {
         String user = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println("Current user is " + user);
+        model.addAttribute("user", user);
         return "homepage";
     }
 
