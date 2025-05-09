@@ -84,7 +84,7 @@ public class ExpenseClient implements EntityClient<Expense> {
 
     @Override
     public void update(EntityWithUserDTO<Expense> entityDto) {
-
+        restTemplate.put(URL_OF_UPDATE_EXPENSE, entityDto, Void.class);
     }
 
     @Override
