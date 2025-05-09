@@ -2,7 +2,12 @@ package com.momchilgenov.springboot.servicecore.expense;
 
 import com.momchilgenov.springboot.servicecore.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -16,7 +21,7 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-    @GetMapping("/getById")
+    @PostMapping("/getById")
     public ExpenseDto getById(@RequestBody EntityWithUserDTO<ExpenseDto> entityDto) {
         return expenseService.getById(entityDto.getUsername(), entityDto.getId());
     }
