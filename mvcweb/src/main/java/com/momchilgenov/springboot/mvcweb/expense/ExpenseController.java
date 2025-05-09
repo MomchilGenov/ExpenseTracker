@@ -2,6 +2,7 @@ package com.momchilgenov.springboot.mvcweb.expense;
 
 import com.momchilgenov.springboot.mvcweb.category.Category;
 import com.momchilgenov.springboot.mvcweb.category.CategoryService;
+import com.momchilgenov.springboot.mvcweb.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -39,15 +40,11 @@ public class ExpenseController {
 
     @PostMapping("")
     public String addExpense(@ModelAttribute("expense") Expense expense) {
-
-        System.out.println("Received expense for creation:");
-        System.out.println("Name = " + expense.getName());
-        System.out.println("Amount = " + expense.getAmount());
-        System.out.println("Date = " + expense.getDate());
-        System.out.println("Category:");
-        System.out.println("Id = " + expense.getCategory().getId());
-        System.out.println("Name = " + expense.getCategory().getName());
-
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        EntityWithUserDTO<Expense> entityDto = new EntityWithUserDTO<>();
+        entityDto.setUsername(username);
+        entityDto.setEntity(expense);
+        expenseService.create(entityDto);
         return "redirect:/api/v1/expenses";
     }
 
