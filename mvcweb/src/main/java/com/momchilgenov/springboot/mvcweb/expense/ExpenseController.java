@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -80,23 +79,9 @@ public class ExpenseController {
 
     @GetMapping("/create")
     public String showExpenseForm(Model model) {
-        //specific user's categories
-        //category should not be null so we can set its id and pass it to service to get it from db
-        List<Category> dummyCategories = new ArrayList<>();
-        Category category1 = new Category("Clothes");
-        Category category2 = new Category("Travel");
-        category2.setId(18L);
-        Category category3 = new Category("Loan");
-        Category category4 = new Category("Sports");
-        Category category5 = new Category("Tech");
-        Category category6 = new Category("Other");
-        dummyCategories.add(category1);
-        dummyCategories.add(category2);
-        dummyCategories.add(category3);
-        dummyCategories.add(category4);
-        dummyCategories.add(category5);
-        dummyCategories.add(category6);
-        model.addAttribute("categories", dummyCategories);
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Category> categories = categoryService.findAll(username);
+        model.addAttribute("categories", categories);
         model.addAttribute("expense", new Expense(null, 0, null, new Category(null)));
         return "expenses/create";
     }
