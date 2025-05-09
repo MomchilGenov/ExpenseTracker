@@ -72,6 +72,8 @@ public class ExpenseController {
     @DeleteMapping("/{id}")
     public String deleteExpenseById(@PathVariable long id) {
         System.out.println("Expense to be deleted, with id = " + id);
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        expenseService.delete(username, id);
         return "redirect:/api/v1/expenses";
     }
 
