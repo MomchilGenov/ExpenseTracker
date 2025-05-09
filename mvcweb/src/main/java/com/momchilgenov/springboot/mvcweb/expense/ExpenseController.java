@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,29 +54,10 @@ public class ExpenseController {
 
     @GetMapping("/{id}")
     public String loadEditPageForExpense(@PathVariable long id, Model model) {
-        System.out.println("Received expense with id = " + id);
-        List<Category> dummyCategories = new ArrayList<>();
-        Category category1 = new Category("Clothes");
-        category1.setId(1L);
-        Category category2 = new Category("Travel");
-        category2.setId(18L);
-        Expense expense = new Expense("Testing edit page", 800836,
-                LocalDate.now(), category1);
-        expense.setId(123L);
-
-        Category category3 = new Category("Loan");
-        Category category4 = new Category("Sports");
-        Category category5 = new Category("Tech");
-        Category category6 = new Category("Other");
-        dummyCategories.add(category1);
-        dummyCategories.add(category2);
-        dummyCategories.add(category3);
-        dummyCategories.add(category4);
-        dummyCategories.add(category5);
-        dummyCategories.add(category6);
-        model.addAttribute("categories", dummyCategories);
-
-
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Category> categories = categoryService.findAll(username);
+        model.addAttribute("categories", categories);
+        Expense expense = expenseService.getById(username, id);
         model.addAttribute("expense", expense);
         return "expenses/edit";
     }
