@@ -1,12 +1,15 @@
 package com.momchilgenov.springboot.servicecore.expense;
 
-import com.momchilgenov.springboot.servicecore.category.CategoryDto;
 import com.momchilgenov.springboot.servicecore.client.EntityClient;
 import com.momchilgenov.springboot.servicecore.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -65,14 +68,12 @@ public class ExpenseClient implements EntityClient<ExpenseDto> {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         EntityWithUserDTO<ExpenseDto> entityDto = new EntityWithUserDTO<>();
-        ExpenseDto expenseDto = new ExpenseDto();
-        expenseDto.setId(id);
-        entityDto.setEntity(expenseDto);
+        entityDto.setId(id);
         entityDto.setUsername(username);
         HttpEntity<EntityWithUserDTO<ExpenseDto>> requestEntity = new HttpEntity<>(entityDto, headers);
         ResponseEntity<ExpenseDto> response = restTemplate.exchange(
                 URL_OF_GET_EXPENSE_BY_ID,
-                HttpMethod.GET,
+                HttpMethod.POST,
                 requestEntity,
                 ExpenseDto.class
         );
