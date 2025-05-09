@@ -31,7 +31,7 @@ public class ExpenseController {
         return expenseService.findAll(username);
     }
 
-    @GetMapping("/getById")
+    @PostMapping("/getById")
     public ExpenseDto getById(@RequestBody EntityWithUserDto<ExpenseDto> entityDto) {
         String username = entityDto.getUsername();
         Long expenseId = entityDto.getId();
