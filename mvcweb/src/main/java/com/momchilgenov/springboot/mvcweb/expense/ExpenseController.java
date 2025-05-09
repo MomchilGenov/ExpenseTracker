@@ -60,11 +60,12 @@ public class ExpenseController {
 
     @PutMapping("")
     public String editExpenseById(@ModelAttribute("expense") Expense expense) {
-        System.out.println("Expense in put method:");
-        System.out.println("Name = " + expense.getName());
-        System.out.println("Amount = " + expense.getAmount());
-        System.out.println("Date = " + expense.getDate());
-        System.out.println("Category id = " + expense.getCategory().getId());
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        EntityWithUserDTO<Expense> entityDto = new EntityWithUserDTO<>();
+        entityDto.setUsername(username);
+        entityDto.setId(expense.getId());
+        entityDto.setEntity(expense);
+        expenseService.update(entityDto);
         return "redirect:/api/v1/expenses";
     }
 
