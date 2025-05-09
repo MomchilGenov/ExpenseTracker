@@ -1,6 +1,7 @@
 package com.momchilgenov.springboot.mvcweb.expense;
 
 import com.momchilgenov.springboot.mvcweb.category.Category;
+import com.momchilgenov.springboot.mvcweb.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,10 +23,12 @@ import java.util.List;
 public class ExpenseController {
 
     private final ExpenseService expenseService;
+    private final CategoryService categoryService;
 
     @Autowired
-    public ExpenseController(ExpenseService expenseService) {
+    public ExpenseController(ExpenseService expenseService, CategoryService categoryService) {
         this.expenseService = expenseService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping("")
