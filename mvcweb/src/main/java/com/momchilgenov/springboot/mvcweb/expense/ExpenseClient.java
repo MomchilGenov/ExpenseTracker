@@ -66,7 +66,20 @@ public class ExpenseClient implements EntityClient<Expense> {
 
     @Override
     public Expense getById(String username, Long id) {
-        return null;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        EntityWithUserDTO<Expense> expenseDto = new EntityWithUserDTO<>();
+        expenseDto.setId(id);
+        expenseDto.setUsername(username);
+        HttpEntity<EntityWithUserDTO<Expense>> requestEntity = new HttpEntity<>(expenseDto, headers);
+        ResponseEntity<Expense> response = restTemplate.exchange(
+                URL_OF_GET_EXPENSE_BY_ID,
+                HttpMethod.POST, //either this or we need to send the username as a url query param which for sec reason is bad
+                //spring by default removes/doesn't  look at the body of a get request
+                requestEntity,
+                Expense.class
+        );
+        return response.getBody();
     }
 
     @Override
