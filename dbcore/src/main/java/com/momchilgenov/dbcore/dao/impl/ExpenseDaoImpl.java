@@ -96,4 +96,13 @@ public class ExpenseDaoImpl implements ExpenseDao {
         Expense expense = entityManager.find(Expense.class, expenseId);
         entityManager.remove(expense);
     }
+
+    @Override
+    @Transactional
+    public List<Expense> findByCategoryId(Long categoryId) {
+        TypedQuery<Expense> query = entityManager
+                .createQuery("FROM Expense e WHERE e.category.id=:categoryId", Expense.class);
+        query.setParameter("categoryId", categoryId);
+        return query.getResultList();
+    }
 }
