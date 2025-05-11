@@ -4,7 +4,11 @@ import com.momchilgenov.springboot.servicecore.client.EntityClient;
 import com.momchilgenov.springboot.servicecore.dto.EntityWithUserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,6 +22,7 @@ public class CategoryClient implements EntityClient<CategoryDto> {
     private final String URL_OF_GET_CATEGORY_BY_ID;
     private final String URL_OF_UPDATE_CATEGORY;
     private final String URL_OF_DELETE_CATEGORY;
+    private final String URL_OF_IS_CATEGORY_DELETABLE;
     private final RestTemplate restTemplate;
 
     @Autowired
@@ -26,12 +31,14 @@ public class CategoryClient implements EntityClient<CategoryDto> {
                           @Value("${URL_OF_CREATE_CATEGORY}") String URL_OF_CREATE_CATEGORY,
                           @Value("${URL_OF_GET_CATEGORY_BY_ID}") String URL_OF_GET_CATEGORY_BY_ID,
                           @Value("${URL_OF_UPDATE_CATEGORY}") String URL_OF_UPDATE_CATEGORY,
-                          @Value("${URL_OF_DELETE_CATEGORY}") String URL_OF_DELETE_CATEGORY) {
+                          @Value("${URL_OF_DELETE_CATEGORY}") String URL_OF_DELETE_CATEGORY,
+                          @Value("${URL_OF_IS_CATEGORY_DELETABLE}") String URL_OF_IS_CATEGORY_DELETABLE) {
         this.URL_OF_FIND_ALL_CATEGORIES = URL_OF_FIND_ALL_CATEGORIES;
         this.URL_OF_CREATE_CATEGORY = URL_OF_CREATE_CATEGORY;
         this.URL_OF_GET_CATEGORY_BY_ID = URL_OF_GET_CATEGORY_BY_ID;
         this.URL_OF_UPDATE_CATEGORY = URL_OF_UPDATE_CATEGORY;
         this.URL_OF_DELETE_CATEGORY = URL_OF_DELETE_CATEGORY;
+        this.URL_OF_IS_CATEGORY_DELETABLE = URL_OF_IS_CATEGORY_DELETABLE;
         this.restTemplate = restTemplate;
 
 
@@ -79,6 +86,12 @@ public class CategoryClient implements EntityClient<CategoryDto> {
                 Void.class
         );
 
+    }
+
+    public boolean isDeletable(Long categoryId) {
+        String url = URL_OF_IS_CATEGORY_DELETABLE + "/{id}";
+        ResponseEntity<Boolean> response = restTemplate.getForEntity(url, Boolean.class, categoryId);
+        return response.getBody();
     }
 
 }
