@@ -105,4 +105,25 @@ public class CategoryClient implements EntityClient<Category> {
         ResponseEntity<Boolean> response = restTemplate.getForEntity(url, Boolean.class, categoryId);
         return response.getBody();
     }
+
+    public boolean isCategoryNameDuplicate(String categoryName, String username) {
+        Category categoryDto = new Category(categoryName);
+        EntityWithUserDTO<Category> entityDto = new EntityWithUserDTO<>();
+        entityDto.setUsername(username);
+        entityDto.setEntity(categoryDto);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<EntityWithUserDTO<Category>> requestEntity = new HttpEntity<>(entityDto, headers);
+        ResponseEntity<Boolean> response = restTemplate.exchange(
+                URL_OF_IS_CATEGORY_NAME_DUPLICATE,
+                HttpMethod.POST,
+                requestEntity,
+                Boolean.class
+        );
+
+        return response.getBody();
+
+    }
 }
