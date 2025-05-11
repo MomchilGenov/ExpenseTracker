@@ -60,4 +60,11 @@ public class CategoryController {
         categoryService.delete(categoryId);
     }
 
+    @PostMapping("/isDuplicate")
+    public boolean isCategoryNameDuplicate(@RequestBody EntityWithUserDto<CategoryDto> entityDto) {
+        String categoryName = entityDto.getEntity().getName();
+        String username = entityDto.getUsername();
+        return categoryService.isCategoryNameDuplicate(categoryName, username);
+    }
+
 }
