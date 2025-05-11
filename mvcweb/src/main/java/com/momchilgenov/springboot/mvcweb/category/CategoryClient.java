@@ -98,7 +98,7 @@ public class CategoryClient implements EntityClient<Category> {
     }
 
     public boolean isDeletable(Long categoryId) {
-        String url = "http://localhost:8080/api/resource/{id}";
+        String url = URL_OF_IS_CATEGORY_DELETABLE + "/{id}";
         ResponseEntity<Boolean> response = restTemplate.getForEntity(url, Boolean.class, categoryId);
         return response.getBody();
     }
