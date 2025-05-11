@@ -57,7 +57,7 @@ public class CategoryController {
     public String saveCategory(@ModelAttribute Category category, BindingResult result, Model model) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String categoryName = category.getName();
-        if (categoryService.isCategoryNameDuplicate(categoryName,username)) {
+        if (categoryService.isCategoryNameDuplicate(categoryName, username)) {
             result
                     .rejectValue("name", "error.categoryNameDuplicate",
                             "A category with this name already exists!");
@@ -72,8 +72,17 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public String updateCategory(@PathVariable Long id, @ModelAttribute Category category) {
+    public String updateCategory(@PathVariable Long id, @ModelAttribute Category category, BindingResult result) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String categoryName = category.getName();
+        if (categoryService.isCategoryNameDuplicate(categoryName, username)) {
+            result
+                    .rejectValue("name", "error.categoryNameDuplicate",
+                            "A category with this name already exists!");
+            return "categories/category_form";
+        }
+
+
         EntityWithUserDTO<Category> entityDto = new EntityWithUserDTO<>();
         entityDto.setId(id);
         entityDto.setUsername(username);
