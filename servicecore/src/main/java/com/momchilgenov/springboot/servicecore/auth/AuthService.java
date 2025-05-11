@@ -19,7 +19,7 @@ public class AuthService {
     private final AuthRepository authRepository;
     private final TokenService tokenService;
     private final JwtUtil jwtUtil;
-    private final String DEFAULT_ROLE = "ROLE_USER";
+    private final String DEFAULT_ROLE = "ROLE_USER"; //sets default role to newly registered users
 
     @Autowired
     public AuthService(AuthRepository authRepository, JwtUtil jwtUtil, TokenService tokenService) {
