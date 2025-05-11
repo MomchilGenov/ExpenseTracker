@@ -41,4 +41,8 @@ public class CategoryService {
         return this.categoryClient.isDeletable(categoryId);
     }
 
+    public boolean isCategoryNameDuplicate(EntityWithUserDTO<CategoryDto> entityDto) {
+        return this.categoryClient.isCategoryNameDuplicate(entityDto);
+    }
+
 }
