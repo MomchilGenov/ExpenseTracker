@@ -48,4 +48,9 @@ public class CategoryController {
         return categoryService.isDeletable(categoryId);
     }
 
+    @PostMapping("/isDuplicate")
+    public boolean isCategoryNameDuplicate(@RequestBody EntityWithUserDTO<CategoryDto> entityDto) {
+        return categoryService.isCategoryNameDuplicate(entityDto);
+    }
+
 }
