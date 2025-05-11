@@ -71,4 +71,10 @@ public class ExpenseService {
     }
 
 
+    public boolean isDeletable(Long categoryId) {
+        List<Expense> expenses = expenseDao.findByCategoryId(categoryId);
+        //no expenses depend on this category; specifically any expenses of the user it belongs to
+        return expenses == null || expenses.isEmpty();
+    }
+
 }
