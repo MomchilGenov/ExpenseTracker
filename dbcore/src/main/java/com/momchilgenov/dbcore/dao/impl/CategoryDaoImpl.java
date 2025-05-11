@@ -89,4 +89,13 @@ public class CategoryDaoImpl implements CategoryDao {
         Category category = query.getSingleResult();
         this.entityManager.remove(category);
     }
+
+    @Override
+    public List<Category> findByCategoryName(String categoryName, Long userId) {
+        TypedQuery<Category> query = this.entityManager
+                .createQuery("FROM Category c WHERE c.name=:categoryName AND c.userId=:userId", Category.class);
+        query.setParameter("categoryName", categoryName);
+        query.setParameter("userId", userId);
+        return query.getResultList();
+    }
 }
