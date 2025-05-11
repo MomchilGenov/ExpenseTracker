@@ -36,4 +36,9 @@ public class CategoryService {
         this.categoryClient.delete(username, id);
     }
 
+    //if an expense has this category as set, teh category cannot be deleted until no expenses have it set
+    public boolean isDeletable(Long categoryId) {
+        return this.categoryClient.isDeletable(categoryId);
+    }
+
 }
