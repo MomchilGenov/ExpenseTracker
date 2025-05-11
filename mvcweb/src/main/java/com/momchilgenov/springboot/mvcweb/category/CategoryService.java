@@ -41,4 +41,8 @@ public class CategoryService {
         return this.categoryClient.isDeletable(categoryId);
     }
 
+    public boolean isCategoryNameDuplicate(String categoryName,String username) {
+        return this.categoryClient.isCategoryNameDuplicate(categoryName,username);
+    }
+
 }
