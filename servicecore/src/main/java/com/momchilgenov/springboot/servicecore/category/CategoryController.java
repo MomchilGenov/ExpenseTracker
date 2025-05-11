@@ -43,4 +43,9 @@ public class CategoryController {
         categoryService.delete(entityDto.getUsername(), entityDto.getId());
     }
 
+    @GetMapping("/isDeletable/{categoryId}")
+    public boolean isDeletable(@PathVariable Long categoryId) {
+        return categoryService.isDeletable(categoryId);
+    }
+
 }
