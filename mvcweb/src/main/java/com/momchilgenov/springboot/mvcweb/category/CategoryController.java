@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -67,11 +68,17 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteCategory(@PathVariable long id) {
+    public String deleteCategory(@PathVariable long id, RedirectAttributes redirectAttributes) {
         System.out.println("Deleting category with id = " + id);
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //have method return a response to handle errors
-        categoryService.delete(username, id);
+        if (categoryService.isDeletable(id)) {
+            categoryService.delete(username, id);
+        } else {
+            redirectAttributes
+                    .addAttribute("errorMessage",
+                            "Cannot delete category because you have expenses that use it.");
+
+        }
 
         return "redirect:/api/v1/categories";
     }
