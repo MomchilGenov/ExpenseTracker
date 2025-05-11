@@ -37,4 +37,8 @@ public class CategoryService {
         this.categoryClient.delete(username, id);
     }
 
+    public boolean isDeletable(Long categoryId) {
+        return this.categoryClient.isDeletable(categoryId);
+    }
+
 }
