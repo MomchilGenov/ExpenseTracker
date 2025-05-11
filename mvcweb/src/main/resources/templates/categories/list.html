@@ -51,6 +51,7 @@
             </td>
         </tr>
         </tbody>
+        <div th:if="${param.errorMessage}" class="alert alert-danger" th:text="${param.errorMessage}"></div>
     </table>
 </div>
 </body>
