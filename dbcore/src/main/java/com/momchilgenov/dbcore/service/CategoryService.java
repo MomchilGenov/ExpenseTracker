@@ -4,7 +4,6 @@ import com.momchilgenov.dbcore.dao.CategoryDao;
 import com.momchilgenov.dbcore.dao.UserDao;
 import com.momchilgenov.dbcore.dto.CategoryDto;
 import com.momchilgenov.dbcore.entity.Category;
-import com.momchilgenov.dbcore.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,5 +52,11 @@ public class CategoryService {
 
     public void delete(Long categoryId) {
         this.categoryDao.delete(categoryId);
+    }
+
+    public boolean isCategoryNameDuplicate(String categoryName, String username) {
+        Long userId = userDao.findUserIdByUsername(username);
+        List<Category> categories = categoryDao.findByCategoryName(categoryName, userId);
+        return categories != null && !categories.isEmpty();
     }
 }
