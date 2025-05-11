@@ -26,4 +26,6 @@ public interface ExpenseDao {
 
     void delete(Long expenseId);
 
+    List<Expense> findByCategoryId(Long categoryId);
+
 }
