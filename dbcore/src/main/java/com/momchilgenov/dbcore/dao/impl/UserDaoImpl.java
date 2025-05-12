@@ -66,6 +66,7 @@ public class UserDaoImpl implements UserDao {
         result.setUsername(foundUser.getUsername());
         result.setRoles(foundUser.getRoles());
         result.setEnabled(foundUser.isEnabled());
+        result.setPassword(foundUser.getPassword());
         return result;
     }
 
@@ -80,15 +81,15 @@ public class UserDaoImpl implements UserDao {
             return null;
         }
         User foundUser = singleUser.get(0);
-        //return null if no such user is found,passwords do not match or is banned
-        if (foundUser == null || !foundUser.getPassword().equals(user.getPassword()) || !foundUser.isEnabled()) {
+        //return null if no such user is found or is banned
+        if (foundUser == null || !foundUser.isEnabled()) {
             return null;
         }
         User result = new User();
         result.setEnabled(true);
         result.setRoles(foundUser.getRoles());
         result.setUsername(foundUser.getUsername());
-        //possibly redundant and security issue
+        result.setPassword(foundUser.getPassword());
         result.setId(foundUser.getId());
         return result;
     }
