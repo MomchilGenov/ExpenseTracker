@@ -6,6 +6,7 @@ import com.momchilgenov.springboot.servicecore.token.JwtAccessToken;
 import com.momchilgenov.springboot.servicecore.token.JwtRefreshToken;
 import com.momchilgenov.springboot.servicecore.token.JwtTokenPair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,21 +20,28 @@ public class AuthService {
     private final AuthRepository authRepository;
     private final TokenService tokenService;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
     private final String DEFAULT_ROLE = "ROLE_USER"; //sets default role to newly registered users
 
     @Autowired
-    public AuthService(AuthRepository authRepository, JwtUtil jwtUtil, TokenService tokenService) {
+    public AuthService(AuthRepository authRepository, JwtUtil jwtUtil,
+                       TokenService tokenService, PasswordEncoder passwordEncoder) {
         this.authRepository = authRepository;
         this.jwtUtil = jwtUtil;
         this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public JwtTokenPair authenticateUser(User user) {
 
-        //validates user exists in db and password matches
         User userDto = authRepository.authenticateUser(user);
         if (userDto == null) {
             //todo - throw userNotFoundException, catch in controller, send 404
+            return null;
+        }
+        String rawPassword = user.getPassword();
+        String hashedPassword = userDto.getPassword();
+        if (!passwordEncoder.matches(rawPassword, hashedPassword)) {
             return null;
         }
         tokenService.revokeAll(userDto.getUsername());
@@ -125,11 +133,14 @@ public class AuthService {
 
     public UserRegistrationStatus register(User user) {
         User userExists = authRepository.findUserByUsername(user.getUsername());
-        //test purposes
-        //User userExists = null;
         if (userExists != null) {
             return new UserRegistrationStatus(true, null);
         }
+        //hash the user's password
+        String rawPassword = user.getPassword();
+        String hashedPassword = passwordEncoder.encode(rawPassword);
+        user.setPassword(hashedPassword);
+
         //gives the user a default role upon registration
         List<String> roles = new ArrayList<>();
         roles.add(DEFAULT_ROLE);
