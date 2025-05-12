@@ -25,6 +25,7 @@ public class UserDto {
         } else {
             this.roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toList());
         }
+        this.password = user.getPassword();
     }
 
     public String getUsername() {
