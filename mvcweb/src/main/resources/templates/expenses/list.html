@@ -25,7 +25,8 @@
     <h2 class="text-center">Expense List</h2>
     <div style="float:left">
         <a th:href="@{/api/v1/expenses/create}" class="btn btn-primary">Add Expense</a>
-        <button class="btn btn-success">Expense Report</button>
+        <a th:href="@{/api/v1/report_by}"
+           class="btn btn-primary">Expense Report</a>
     </div>
     <br><br>
     <table class="table table-striped table-hover">
