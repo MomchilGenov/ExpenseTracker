@@ -1,11 +1,14 @@
 package com.momchilgenov.springboot.mvcweb.reports;
 
+import com.momchilgenov.springboot.mvcweb.expense.Expense;
+import com.momchilgenov.springboot.mvcweb.expense.ExpenseService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +25,13 @@ import java.util.Map;
 @Controller
 @RequestMapping("/api/v1")
 public class ExpenseReportController {
+
+    private final ExpenseReportService expenseReportService;
+
+    @Autowired
+    public ExpenseReportController(ExpenseReportService expenseReportService) {
+        this.expenseReportService = expenseReportService;
+    }
 
 
     @GetMapping("/expense-report-filtered")
