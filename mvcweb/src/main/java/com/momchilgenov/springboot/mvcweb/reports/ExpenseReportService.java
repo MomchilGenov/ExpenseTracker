@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ExpenseReportService {
@@ -20,7 +21,12 @@ public class ExpenseReportService {
     }
 
     private List<Expense> getFilteredExpenses(LocalDate startDate, LocalDate endDate, String username) {
-        return null;
+        List<Expense> allExpenses = expenseClient.findAll(username);
+        return allExpenses.stream()
+                .filter(expense ->
+                        !expense.getDate().isBefore(startDate) &&
+                                !expense.getDate().isAfter(endDate)) //include start and end dates
+                .toList();
     }
 
     public Map<String, Double> getGroupedExpenses(String groupBy, List<Expense> filteredExpenses, String username) {
