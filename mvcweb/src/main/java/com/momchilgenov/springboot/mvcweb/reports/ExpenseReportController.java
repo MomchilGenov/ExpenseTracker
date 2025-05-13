@@ -1,7 +1,5 @@
 package com.momchilgenov.springboot.mvcweb.reports;
 
-import com.momchilgenov.springboot.mvcweb.expense.Expense;
-import com.momchilgenov.springboot.mvcweb.expense.ExpenseService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -10,7 +8,9 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -54,14 +52,9 @@ public class ExpenseReportController {
             endDate = LocalDate.now();
         }
 
-
+        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         // Grouping
-        Map<String, Double> groupedData = new HashMap<>();
-        groupedData.put("Test group 1", 180d);
-        groupedData.put("Test group 2", 578d);
-        groupedData.put("Test group 3", 911d);
-        DateTimeFormatter formatter;
-
+        Map<String, Double> groupedData = expenseReportService.getGroupedExpenses(startDate, endDate, groupBy, username);
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (Map.Entry<String, Double> entry : groupedData.entrySet()) {
             dataset.setValue(entry.getValue(), "Expenses", entry.getKey());
@@ -78,7 +71,19 @@ public class ExpenseReportController {
     }
 
     @GetMapping("/report_by")
-    public String getReportByGroupPage() {
+    public String getReportByGroupPage(@RequestParam(required = false)
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       LocalDate startDate,
+                                       @RequestParam(required = false)
+                                       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       LocalDate endDate,
+                                       @RequestParam(defaultValue = "category")
+                                       String groupBy,
+                                       Model model) {
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("groupBy", groupBy);
+
         return "expenses/report_by_group";
     }
 }
