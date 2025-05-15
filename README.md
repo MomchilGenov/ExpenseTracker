@@ -17,6 +17,9 @@ with the idea of easily changing the underlying implementation of each component
 mvcweb, servicecore and dbcore which are the front-end, back-end and persistence logic respectively. The front-end module which is mvcweb is written in 
 Java 23 + Spring Boot 3 with Spring MVC + Thymeleaf and Spring Web. The idea for the loose coupling is to provide the opportunity to switch out
 Spring MVC + Thymeleaf for example with a JavaScript based client instead. Likewise with the other 2 components.
+
+![Image](https://github.com/user-attachments/assets/d051e387-e9ea-481f-85a0-e102cedf3548)
+
 ## Features
 
 ## Tech Stack
