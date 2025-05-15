@@ -23,18 +23,35 @@ Spring MVC + Thymeleaf for example with a JavaScript based client instead. Likew
 ## Features
 
 ## Tech Stack
-<pre lang="markdown"> ```xml <?xml version="1.0" encoding="UTF-8"?> <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"> <modelVersion>4.0.0</modelVersion> <parent> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-parent</artifactId> <version>3.4.0</version> <relativePath/> </parent> <groupId>com.momchilgenov.springboot</groupId> <artifactId>mvcweb</artifactId> <version>0.0.1-SNAPSHOT</version> <name>mvcweb</name> <description>Presentation Layer Project for Expense Tracker</description> <properties> <java.version>23</java.version> </properties> <dependencies> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-thymeleaf</artifactId> </dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-web</artifactId> </dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-devtools</artifactId> <scope>runtime</scope> <optional>true</optional> </dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-test</artifactId> <scope>test</scope> </dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-webflux</artifactId> </dependency> <dependency> <groupId>io.jsonwebtoken</groupId> <artifactId>jjwt-api</artifactId> <version>0.11.5</version> </dependency> <dependency> <groupId>io.jsonwebtoken</groupId> <artifactId>jjwt-impl</artifactId> <version>0.11.5</version> </dependency> <dependency> <groupId>io.jsonwebtoken</groupId> <artifactId>jjwt-jackson</artifactId> <version>0.11.5</version> </dependency> <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-security</artifactId> </dependency> <dependency> <groupId>org.jfree</groupId> <artifactId>jfreechart</artifactId> <version>1.5.3</version> </dependency> </dependencies> <build> <plugins> <plugin> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-maven-plugin</artifactId> </plugin> </plugins> </build> </project> ``` </pre>
+MVCWEB:
+Java 23
+Spring Boot + Spring Web + Spring MVC + Thymeleaf + Spring Security + Java JWT + JFreeChart (Java lib for charts and diagrams) + Maven as a build tool.
 
+SERVICECORE:
+Java 23
+Spring Boot + Spring Security + Spring Web + Java JWT + Maven as a build tool.
+
+DBCORE:
+Java 24
+Spring Web + Spring Data JPA + SQL + MySQL Workbench 8.0 CE
+
+For the specific dependencies, please refer to the respective pom.xml file of each component. Each component has its own git branch (SingleServerClientMVC,ServiceLayer,DbServer).
+The projects have been developed on a Windows 10 Pro OS in IntelliJ Idea.
+
+Spring Web was used to provide REST support for the 3 APIs to communicate. Spring MVC is used for server-side rendering of Thymeleaf templates that are then sent to the user's browser.
+In combination with the JFreeChart library, the two technologies were used to develop the expense report feature. Spring Security provides the Security Filter Chain used to pre-process
+every request and authenticate the user via a JWT access token carried in an HTTP-only cookie. Additionally it is leveraged for roles as well as for providing a BCrypt PasswordEncoder in 
+Servicecore to hash the password of newly-registered users. Dbcore uses Spring Data Jpa(Hibernate) for data persistency in combination with SQL and MySQL Workbench as a DB Client.
 
 ## Getting Started
-
+//todo - how to configure URLS(application.properties file), upload structurally important files like the tests one + pom.xml mvcweb,etc; 
 ## API Overview
-
+// todo - sequence diagrams for API use case flow
 ## Security & Authentication
-
+//todo - explain jwt implementation in detail
+## Demo
+video showcasing all the features of the app 
 ## Future Improvements
-
-## UML Diagrams / Videos (Coming Soon)
-
+what will be fixed and added as features
 ## License
-
+quick note which license you use
