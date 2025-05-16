@@ -146,7 +146,11 @@ You should set the username and password for your database client connection. Yo
 To run the program, make sure you run mvcweb, servicecore and dbcore all at the same time. Keep in mind that if you are running them on 2 or 3 different machines, you might have to
 configure your firewall to allow the communication. Mind you, the system as of March 2025 is configured to use HTTP and not HTTPS, as using HTTPS will be developed additionally in the future,
 since it requires developing additional features. When all three are running at the same time, access http://localhost:8080/login . From there you can start using the application. How to
-do that, will be demonstrated below.
+do that, will be demonstrated later on.
+
+To create the database, execute the following queries.
+
+[!Db Schema Creation](DB Schema Creation.sql)
 
 
 ## API Overview
