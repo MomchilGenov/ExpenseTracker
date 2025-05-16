@@ -52,7 +52,7 @@ to be able to persist data. How to do all of the above, what the database schema
 ### Configuring mvcweb
 To start - you can git clone or simply download the mvcweb project from the SingleServerMVCClient branch as a zip archive and unzip it in a folder of your choice on your machine. 
 You will need to manually configure a set of urls in the application.properties file of the mvcweb project. Open the unzipped project folder as a project in IntelliJ Idea
-and then open the "application.properties" file. You will see the following properties (key-value pairs): 
+and then open the ```application.properties``` file. You will see the following properties (key-value pairs): 
 ```
 spring.application.name=mvcweb
 logging.level.org.springframework.security=DEBUG
@@ -86,13 +86,41 @@ replace ``` DESIRED_IP:DESIRED_PORT ``` with ```123.45.6:8081``` . Make sure the
 1) the string is the same in the servicecore configuration
 2) the string is at least 32 symbols long
 It is fine to keep it as it is, for the sake of testing the features of the app, but in general you should use a strong key which would usually be generated using a tool.
-```ISSUER``` and ```AUDIENCE``` need to have the values set as above as this is vital for the proper clai setting in the jwt in the program and if changed, servicecore will reject
+```ISSUER``` and ```AUDIENCE``` need to have the values set as above as this is vital for the proper claim setting in the jwt in the program and if changed, servicecore will reject
 the tokens as potentially malicious. After having configured the app, you can run it and it will be available at http://localhost:8080/homepage which will redirect you to
 the login page. You can also just visit it directly at http://localhost:8080/login .
 Notice: You need to have a running servicecore and dbcore instance as well as a db client to use the app.
 
 ### Configuring servicecore
+Similarly as above, go to the ServiceLayer branch of the repo and download the project. After that, open the project folder as an IntelliJ project and open the ```application.properties``` file.
+You should see the following:
+```
+spring.application.name=servicecore
+server.port=8081
+SECRET_KEY=a_temporary_secret_key_to_test_the_app
+ISSUER=servicecore
+AUDIENCE=mvcweb
+ACCESS_TOKEN_DURATION_IN_MINUTES=15
+REFRESH_TOKEN_DURATION_IN_MINUTES=120
+URL_OF_FIND_USER_BY_USERNAME=http://DESIRED_IP:DESIRED_PORT/api/auth/user
+URL_OF_AUTHENTICATE_USER=http://DESIRED_IP:DESIRED_PORT/api/auth/authenticateUser
+URL_OF_REGISTER_USER=http://DESIRED_IP:DESIRED_PORT/api/auth/register
+URL_OF_VALIDATE_AUTHORITY=http://DESIRED_IP:DESIRED_PORT/api/auth/validateAuthority
+URL_OF_FIND_ALL_CATEGORIES=http://DESIRED_IP:DESIRED_PORT/api/categories/findAll
+URL_OF_CREATE_CATEGORY=http://DESIRED_IP:DESIRED_PORT/api/categories/create
+URL_OF_GET_CATEGORY_BY_ID=http://DESIRED_IP:DESIRED_PORT/api/categories/getById
+URL_OF_UPDATE_CATEGORY=http://DESIRED_IP:DESIRED_PORT/api/categories/update
+URL_OF_DELETE_CATEGORY=http://DESIRED_IP:DESIRED_PORT/api/categories/delete
+URL_OF_IS_CATEGORY_DELETABLE=http://DESIRED_IP:DESIRED_PORT/api/expenses/isDeletable
+URL_OF_IS_CATEGORY_NAME_DUPLICATE=http://DESIRED_IP:DESIRED_PORT/api/categories/isDuplicate
+URL_OF_FIND_ALL_EXPENSES=http://DESIRED_IP:DESIRED_PORT/api/expenses/findAll
+URL_OF_CREATE_EXPENSE=http://DESIRED_IP:DESIRED_PORT/api/expenses/create
+URL_OF_GET_EXPENSE_BY_ID=http://DESIRED_IP:DESIRED_PORT/api/expenses/getById
+URL_OF_UPDATE_EXPENSE=http://DESIRED_IP:DESIRED_PORT/api/expenses/update
+URL_OF_DELETE_EXPENSE=http://DESIRED_IP:DESIRED_PORT/api/expenses/delete
 
+
+```
 
 
 ## API Overview
