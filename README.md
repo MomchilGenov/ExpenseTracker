@@ -44,8 +44,6 @@ every request and authenticate the user via a JWT access token carried in an HTT
 Servicecore to hash the password of newly-registered users. Dbcore uses Spring Data Jpa(Hibernate) for data persistency in combination with SQL and MySQL Workbench as a DB Client.
 
 ## Getting Started
-//todo - how to configure URLS(application.properties file), upload structurally important files like the tests one + pom.xml mvcweb,etc; 
-
 This documentation assumes basic understanding of HTTP and ports as well as basic Spring configurations such as ```server.port=1234``` .
 To run the application, you need to have a running instance of the mvcweb, servicecore and dbcore projects. Additionally you will need a running MySQL Workbench instance
 to be able to persist data. How to do all of the above, what the database schema is and more is explained below.
