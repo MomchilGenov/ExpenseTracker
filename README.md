@@ -45,6 +45,7 @@ Servicecore to hash the password of newly-registered users. Dbcore uses Spring D
 
 ## Getting Started
 //todo - how to configure URLS(application.properties file), upload structurally important files like the tests one + pom.xml mvcweb,etc; 
+This documentation assumes basic understanding of HTTP and ports.
 To run the application, you need to have a running instance of the mvcweb, servicecore and dbcore projects. Additionally you will need a running MySQL Workbench instance
 to be able to persist data. How to do all of the above, what the database schema is and more is explained below.
 
@@ -78,6 +79,20 @@ URL_OF_UPDATE_EXPENSE=http://DESIRED_IP:DESIRED_PORT/expenses/update
 URL_OF_DELETE_EXPENSE=http://DESIRED_IP:DESIRED_PORT/expenses/delete
 
 ```
+You need to replace ``` DESIRED_IP:DESIRED_PORT ``` with the ip and port of the machine you will run servicecore on.
+For example if the ip of the machine that you will run servicecore on is 123.45.6 and you want to run it on port 8081, you should
+replace ``` DESIRED_IP:DESIRED_PORT ``` with ```123.45.6:8081``` . Make sure the port is free for use.
+```SECRET_KEY``` is the key that is used to sign the jwts. You can choose whatever string you wish, as long as :
+1) the string is the same in the servicecore configuration
+2) the string is at least 32 symbols long
+It is fine to keep it as it is, for the sake of testing the features of the app, but in general you should use a strong key which would usually be generated using a tool.
+```ISSUER``` and ```AUDIENCE``` need to have the values set as above as this is vital for the proper clai setting in the jwt in the program and if changed, servicecore will reject
+the tokens as potentially malicious. After having configured the app, you can run it and it will be available at http://localhost:8080/homepage which will redirect you to
+the login page. You can also just visit it directly at http://localhost:8080/login .
+Notice: You need to have a running servicecore and dbcore instance as well as a db client to use the app.
+
+### Configuring servicecore
+
 
 
 ## API Overview
