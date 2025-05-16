@@ -54,4 +54,4 @@ video showcasing all the features of the app
 ## Future Improvements
 what will be fixed and added as features
 ## License
-quick note which license you use
+This project is under the GNU GENERAL PUBLIC LICENSE.
