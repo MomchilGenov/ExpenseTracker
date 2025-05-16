@@ -150,7 +150,7 @@ do that, will be demonstrated later on.
 
 To create the database, execute the following queries.
 
-```
+<pre lang="markdown"> ```
 DROP DATABASE expense_tracker;
 CREATE DATABASE expense_tracker;
 USE expense_tracker;
@@ -200,7 +200,7 @@ FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 ```
-
+</pre>
 
 ## API Overview
 // todo - sequence diagrams for API use case flow
