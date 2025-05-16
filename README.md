@@ -150,7 +150,7 @@ do that, will be demonstrated later on.
 
 To create the database, execute the following queries.
 
-[!Db Schema Creation](DB Schema Creation.sql)
+![Db Schema Creation](ExpenseTracker/DB Schema Creation.sql)
 
 
 ## API Overview
