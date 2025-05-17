@@ -202,6 +202,164 @@ FOREIGN KEY(user_id) REFERENCES users(id)
 ## API Overview
 // todo - sequence diagrams for API use case flow
 ## Security & Authentication
+The system uses JWT for authentication and authorization. Upon system start there is a form login page. Should an unauthenticated user try to access an API endpoint different from the form login
+or the registration page, the system will redirect the request to the form login. Upon entering a username and password and submitting them, mvcweb sends them to servicecore for authentication.
+
+```
+package com.momchilgenov.springboot.mvcweb.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+
+    private final JwtAuthFilter filter;
+    private final JwtAuthProvider authProvider;
+
+    @Autowired
+    public SecurityConfig(JwtAuthFilter authFilter, JwtAuthProvider authProvider) {
+        this.filter = authFilter;
+        this.authProvider = authProvider;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Disable session creation
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("register").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .authenticationProvider(authProvider)
+                .exceptionHandling(e ->
+                        e.authenticationEntryPoint((request, response, authException) -> {
+                            response.sendRedirect("/login"); // Redirect to login page
+                        })).logout(AbstractHttpConfigurer::disable);
+
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
+
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider customAuthenticationProvider() {
+        return authProvider;
+    }
+
+    //configures GLOBALLY, not just for http, the auth provider to be used to be your custom one,FORCES it on
+    //the auth manager
+    @Autowired
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authProvider);
+    }
+
+}
+```
+The above class is the configuration for how the system works with regards to security and in this case in mvcweb. The main idea is that Spring Security has a SecurityFilterChain which is a chain of filters
+through which every http request passes through and some type of logic is performed on it. After that an ```AuthenticationManager``` is used to try an authenticate the request by calling all of its available ```AuthenticationProvider```s and passing the request to their ```authenticate()``` method. Typically this is where we would perform a typical out-of-the-box implementation where we use ```DaoAuthenticationProvider``` and a ```UserDetailsService``` with a JDBC implementation of it and a ```PasswordEncoder``` bean, however our database is not on the same machine as the one running mvcweb or would just happen to be so. Because of that we need to write our own provider and send the credentials to servicecore which will then fetch data from dbcore, perform authentication logic and on success will return a ```JwtTokenPair```  to mvcweb .
+
+``` 
+package com.momchilgenov.springboot.mvcweb.token.dto;
+
+public record JwtTokenPair(JwtAccessToken accessToken, JwtRefreshToken refreshToken) {
+}
+
+```
+```
+package com.momchilgenov.springboot.mvcweb.token.dto;
+
+public record JwtAccessToken(String token) {
+}
+
+```
+```
+package com.momchilgenov.springboot.mvcweb.token.dto;
+
+public  record JwtRefreshToken (String token){
+}
+
+```
+For now assume that a ```JwtAccessToken``` and ```JwtRefreshToken``` are tokens use for access and respectively refreshing.
+In the configuration above we saw that we can set the duration of an access token and a refresh token. The basic idea is that when a user successfully authenticates into the system,
+they receive one access token and one refresh token, formally strings, that are saved as http-only cookies in their browser which prevents javascript pieces of code to access them and
+thus preventing malicious access to them, while always being sent with every http request. The access token is used by mvcweb to authenticate the user on every request. Should it expire,
+mvcweb looks for a refresh token and should it find a valid such token, sends it to servicecore and receives a new pair or tokens, whereby the previous two tokens are revoked and no longer considered valid.
+There are multiple ways to revoke tokens, but given the desire to stay true to REST and be lightweight, the mechanism chosen for this project is using a ```TokenService``` :
+```
+package com.momchilgenov.springboot.servicecore.auth;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Service
+public class TokenService {
+
+    /**
+     * revokedTokens - username,iat timestamp
+     * any token for a user with an iat claim prior to the Date value in the map is considered revoked
+     */
+    private final ConcurrentHashMap<String, Date> revokedTokens;
+
+    @Autowired
+    public TokenService() {
+        this.revokedTokens = new ConcurrentHashMap<>();
+    }
+
+    /**
+     * revokes all tokens for a given user issued before the present moment
+     *
+     * @param username - the user for whom all tokens issued up to current moment should be revoked
+     */
+    public void revokeAll(String username) {
+        //to handle exact timestamp match problem
+        revokedTokens.put(username, Date.from(Instant.now().minusMillis(1000)));
+        // revokedTokens.put(username, Date.from(Instant.now()));
+    }
+
+    /**
+     * @param username - the username of the user
+     * @param iatClaim - the token claim to verify against to see if the token from
+     *                 which the claim was extracted is revoked
+     * @return - true, if the token is revoked, false otherwise
+     */
+    public boolean isRevoked(String username, Date iatClaim) {
+        if (revokedTokens.containsKey(username)) {
+            return this.revokedTokens.get(username).after(iatClaim);
+        }
+        return false;
+    }
+
+}
+
+```
+where we use  ```ConcurrentHashMap<String, Date> revokedTokens``` due to having a ```@Controller``` calling the services which might result in a concurrency problem such as a race condition and an incomplete
+revocation or other undefined behavior. The key and value is a string and date respectively to keep track of users by username and a timestamp. An entry of ```<"John Doe",timestamp1>``` for example means that all tokens, be they access or refresh tokens, issued prior  to ```timestamp1 ``` are considered revoked. To revoke a token, we just update the timestamp. When issuing tokens, we also need to revoke the previously issued ones to avoid long-lived tokens leaking to malicious hackers. There is a problem with the timestamp precision, since when issuing a token pair right after revoking it, the probability of the difference between the revocation moment and token generation being small enough to be ignored by the comparison of the two ```Date``` objects is high, so we manually alter the revocation timestamp tp be 1000ms earlier to avoid the new tokens to be considered revoked when they really are not.
+
 //todo - explain jwt implementation in detail
 ## Demo
 video showcasing all the features of the app 
