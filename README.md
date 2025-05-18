@@ -359,13 +359,21 @@ public class TokenService {
 ```
 where we use  ```ConcurrentHashMap<String, Date> revokedTokens``` due to having a ```@Controller``` calling the services which might result in a concurrency problem such as a race condition and an incomplete
 revocation or other undefined behavior. The key and value is a string and date respectively to keep track of users by username and a timestamp. An entry of ```<"John Doe",timestamp1>``` for example means that all tokens, be they access or refresh tokens, issued prior  to ```timestamp1 ``` are considered revoked. To revoke a token, we just update the timestamp. When issuing tokens, we also need to revoke the previously issued ones to avoid long-lived tokens leaking to malicious hackers. There is a problem with the timestamp precision, since when issuing a token pair right after revoking it, the probability of the difference between the revocation moment and token generation being small enough to be ignored by the comparison of the two ```Date``` objects is high, so we manually alter the revocation timestamp to be 1000ms earlier to avoid the new tokens to be considered revoked when they really are not.
-This is how revocation and generation work. To finish with the ```SecurityConfig``` , the notable points are that we create our own ```AuthenticationManager``` and register with it a custom ```AuthenticationProvider``` . We also use our own custom ```OncePerRequestFilter``` called ```JwtAuthFilter``` to extract and save the http-only cookies and pass them on to the ```AuthenticationService``` 
+This is how revocation and generation work. To finish with the ```SecurityConfig``` , the notable points are that we create our own ```AuthenticationManager``` and register with it a custom ```AuthenticationProvider``` . A custom ```OncePerRequestFilter``` called ```JwtAuthFilter``` is also used to extract and save the http-only cookies and pass them on to the ```AuthenticationService``` 
 to validate the tokens. For the logic of encoding, decoding tokens and other related work with them, we use a utility class called ```JwtUtil``` .
+The ```JwtUtil``` class and its methods are self-explanatory by their names. ```servicecore``` has a similar class, but with added token generation methods. Password encryption happens in ```servicecore``` .
+Those are essentially the main points of how security works within the system in addition to ```dbcore``` keeping track of users and what roles they have as well as their hashed passwords. As of now, the system
+does not impose restrictions based on role, in the sense that no endpoint is protected with a requirement for an admin role, although that can easily be added in the SecurityConfig.
 
-//todo - explain jwt implementation in detail
 ## Demo
 video showcasing all the features of the app 
+
+
+
 ## Future Improvements
-what will be fixed and added as features
+Future improvements include code style changes such as renaming some classes from ...Repository to ...Service for convention reasons, handling exceptions in some places more gracefully, wrapping sending and return types in ```ResponseEntity``` objects, various renamings, imports optimizations, code cleanup such as unnecessary print statements, a few leftover todos, adding a ```RestTemplate``` bean in ```servicecore``` and ```dbcore``` instead of instantiating it everywhere or all together moving on to asynchronous communication, all sorts of such cleanup and simplification of code where possible.
+In terms of features - a user management page for an admin role user to be able to manage the users within the system - banning, enabling, deleting users and so on.
+Additionally allow for users to form groups and share expenses and keep track of group expenses and individual contributions within a group. Setting a budget and warnings when reaching a given treshold.
+A longer-term feature is creating a javascript implementation of mvcweb, as in a client-side instead of server-side rendering module and expanding ```servicecore``` however needed to make the new module compatible(mainly possible authentication and authorization calls).
 ## License
 This project is under the GNU GENERAL PUBLIC LICENSE.
