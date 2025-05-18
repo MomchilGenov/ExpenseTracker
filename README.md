@@ -199,8 +199,6 @@ FOREIGN KEY(user_id) REFERENCES users(id)
 
 </pre>
 
-## API Overview
-// todo - sequence diagrams for API use case flow
 ## Security & Authentication
 The system uses JWT for authentication and authorization. Upon system start there is a form login page. Should an unauthenticated user try to access an API endpoint different from the form login
 or the registration page, the system will redirect the request to the form login. Upon entering a username and password and submitting them, mvcweb sends them to servicecore for authentication.
