@@ -300,37 +300,14 @@ public  record JwtRefreshToken (String token){
 }
 
 ```
-🔐 JWT Authentication Flow
-For now, assume that JwtAccessToken and JwtRefreshToken are tokens used for access and refreshing, respectively.
-
-When a user successfully authenticates into the system, they receive:
-
-One access token
-
-One refresh token
-
-These are sent as HTTP-only cookies, which:
-
-Prevent JavaScript access (mitigating XSS attacks)
-
-Are automatically included in every HTTP request
-
-📌 Token Expiry & Renewal
-The access token is used by the mvcweb server to authenticate the user on each request.
-
-When the access token expires, mvcweb:
-
-Checks for a valid refresh token
-
-If found, sends it to servicecore
-
-Receives a new token pair (access + refresh)
-
-The old tokens are revoked
-
-🔁 Token Revocation
-To stay true to REST principles and remain lightweight, token revocation is handled using a dedicated TokenService. This avoids persistent sessions and server-side state wherever possible.
-TokenService
+For now assume that a JwtAccessToken and JwtRefreshToken are tokens use for access and respectively refreshing. In the configuration above we saw
+that we can set the duration of an access token and a refresh token. The basic idea is that when a user successfully authenticates into the system,
+they receive one access token and one refresh token, formally strings, that are saved as http-only cookies in their browser which prevents javascript
+pieces of code to access them and thus preventing malicious access to them, while always being sent with every http request. The access token is used by
+mvcweb to authenticate the user on every request. Should it expire, mvcweb looks for a refresh token and should it find a valid such token, sends it
+to servicecore and receives a new pair or tokens, whereby the previous two tokens are revoked and no longer considered valid. There are multiple ways 
+to revoke tokens, but given the desire to stay true to REST and be lightweight, the mechanism chosen for this project is using a 
+```TokenService``` :
 ```
 package com.momchilgenov.springboot.servicecore.auth;
 
