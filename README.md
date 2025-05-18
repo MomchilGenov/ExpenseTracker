@@ -363,9 +363,36 @@ where we use  ```ConcurrentHashMap<String, Date> revokedTokens``` due to having 
 revocation or other undefined behavior. The key and value is a string and date respectively to keep track of users by username and a timestamp. An entry of ```<"John Doe",timestamp1>``` for example means that all tokens, be they access or refresh tokens, issued prior  to ```timestamp1 ``` are considered revoked. To revoke a token, we just update the timestamp. When issuing tokens, we also need to revoke the previously issued ones to avoid long-lived tokens leaking to malicious hackers. There is a problem with the timestamp precision, since when issuing a token pair right after revoking it, the probability of the difference between the revocation moment and token generation being small enough to be ignored by the comparison of the two ```Date``` objects is high, so we manually alter the revocation timestamp to be 1000ms earlier to avoid the new tokens to be considered revoked when they really are not.
 This is how revocation and generation work. To finish with the ```SecurityConfig``` , the notable points are that we create our own ```AuthenticationManager``` and register with it a custom ```AuthenticationProvider``` . A custom ```OncePerRequestFilter``` called ```JwtAuthFilter``` is also used to extract and save the http-only cookies and pass them on to the ```AuthenticationService``` 
 to validate the tokens. For the logic of encoding, decoding tokens and other related work with them, we use a utility class called ```JwtUtil``` .
-The ```JwtUtil``` class and its methods are self-explanatory by their names. ```servicecore``` has a similar class, but with added token generation methods. Password encryption happens in ```servicecore``` .
+The ```JwtUtil``` class and its methods are self-explanatory by their names. ```servicecore``` has a similar class, but with added token generation methods.
+
+```servicecore```'s ```JwtUtil```'s method for generating access tokens :
+```
+public JwtAccessToken generateJwtAccessToken(User user) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", user.getRoles());
+        Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+
+        return new JwtAccessToken(
+                Jwts.builder()
+                        .setAudience(AUDIENCE)
+                        .setIssuer(ISSUER)
+                        .setIssuedAt(new Date())
+                        .setSubject(user.getUsername())
+                        .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * ACCESS_TOKEN_DURATION_IN_MINUTES))
+                        .signWith(key, SignatureAlgorithm.HS256)
+                        .addClaims(claims)
+                        .compact()
+        );
+    }
+
+```
+The above code sets the claims in the jwt and encodes them into a string. The ```AUDIENCE``` and ```ISSUER``` claims are used as a type of stamp as to who issued the token and who it is intended to, making it harder for malicious entities to tamper or reproduce a token. These claims as seen in the configuration section can be customized.
+
+Password encryption happens in ```servicecore``` .
 Those are essentially the main points of how security works within the system in addition to ```dbcore``` keeping track of users and what roles they have as well as their hashed passwords. As of now, the system
 does not impose restrictions based on role, in the sense that no endpoint is protected with a requirement for an admin role, although that can easily be added in the SecurityConfig.
+
 
 ## Demo
 video showcasing all the features of the app 
