@@ -392,7 +392,7 @@ does not impose restrictions based on role, in the sense that no endpoint is pro
 
 
 ## Demo
-video showcasing all the features of the app 
+Unfortunately, GitHub does not support the extension of the videos of the demos. In any case, upon download, they should be playable in any modern general purpose video player. I can play those videos on my machine using "Media Player". The videos themselves can be found in the "main" branch of this repo, titled respectively "Login Demo","Category Demo","Expense Demo","Expense Report Demo" .
 
 
 
