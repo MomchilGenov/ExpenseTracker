@@ -148,7 +148,7 @@ do that, will be demonstrated later on.
 
 To create the database, execute the following queries.
 
-<pre lang="markdown">
+```sql
 DROP DATABASE expense_tracker;
 CREATE DATABASE expense_tracker;
 USE expense_tracker;
@@ -196,8 +196,7 @@ user_id BIGINT NOT NULL,
 FOREIGN KEY(category_id) REFERENCES categories(id),
 FOREIGN KEY(user_id) REFERENCES users(id)
 );
-
-</pre>
+```
 
 ## Security & Authentication
 The system uses JWT for authentication and authorization. Upon system start there is a form login page. Should an unauthenticated user try to access an API endpoint different from the form login
