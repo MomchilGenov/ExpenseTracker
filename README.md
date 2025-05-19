@@ -203,7 +203,7 @@ FOREIGN KEY(user_id) REFERENCES users(id)
 The system uses JWT for authentication and authorization. Upon system start there is a form login page. Should an unauthenticated user try to access an API endpoint different from the form login
 or the registration page, the system will redirect the request to the form login. Upon entering a username and password and submitting them, mvcweb sends them to servicecore for authentication.
 
-```
+```java
 package com.momchilgenov.springboot.mvcweb.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
