@@ -277,21 +277,21 @@ public class SecurityConfig {
 The above class is the configuration for how the system works with regards to security and in this case in mvcweb. The main idea is that Spring Security has a SecurityFilterChain which is a chain of filters
 through which every http request passes through and some type of logic is performed on it. After that an ```AuthenticationManager``` is used to try an authenticate the request by calling all of its available ```AuthenticationProvider```s and passing the request to their ```authenticate()``` method. Typically this is where we would perform a typical out-of-the-box implementation where we use ```DaoAuthenticationProvider``` and a ```UserDetailsService``` with a JDBC implementation of it and a ```PasswordEncoder``` bean, however our database is not on the same machine as the one running mvcweb or would just happen to be so. Because of that we need to write our own provider and send the credentials to servicecore which will then fetch data from dbcore, perform authentication logic and on success will return a ```JwtTokenPair```  to mvcweb .
 
-``` 
+```java 
 package com.momchilgenov.springboot.mvcweb.token.dto;
 
 public record JwtTokenPair(JwtAccessToken accessToken, JwtRefreshToken refreshToken) {
 }
 
 ```
-```
+```java
 package com.momchilgenov.springboot.mvcweb.token.dto;
 
 public record JwtAccessToken(String token) {
 }
 
 ```
-```
+```java
 package com.momchilgenov.springboot.mvcweb.token.dto;
 
 public  record JwtRefreshToken (String token){
@@ -306,7 +306,7 @@ mvcweb to authenticate the user on every request. Should it expire, mvcweb looks
 to servicecore and receives a new pair or tokens, whereby the previous two tokens are revoked and no longer considered valid. There are multiple ways 
 to revoke tokens, but given the desire to stay true to REST and be lightweight, the mechanism chosen for this project is using a 
 ```TokenService``` :
-```
+```java
 package com.momchilgenov.springboot.servicecore.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -364,7 +364,7 @@ to validate the tokens. For the logic of encoding, decoding tokens and other rel
 The ```JwtUtil``` class and its methods are self-explanatory by their names. ```servicecore``` has a similar class, but with added token generation methods.
 
 ```servicecore```'s ```JwtUtil```'s method for generating access tokens :
-```
+```java
 public JwtAccessToken generateJwtAccessToken(User user) {
 
         Map<String, Object> claims = new HashMap<>();
