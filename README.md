@@ -2,6 +2,11 @@
 
 
 ## Overview
+If you run into any issues running the project by following the instructions below, feel free to open an issue and describing the problem you are facing.
+You can additionally view the .mkv files in this branch ("main") by downloading them and playing them with any general purpose video player, for example "Media Player".
+Each video is about 3 minutes long. The videos were taken on 19.05.2025 .
+Detailed instructions and documentation about the project is available below:
+
 This is a simple expense tracker that allows users to register into the system with a username and password or login if they already have an account.
 They can then view the categories their profile has, create new ones,update existing ones or delete them, respectively.
 Then they can view all their expenses, modify them, delete them or add new ones. In addition, they can also use the system to generate expense reports,
@@ -199,6 +204,7 @@ FOREIGN KEY(user_id) REFERENCES users(id)
 
 INSERT INTO roles (name) VALUES ('ROLE_USER'), ('ROLE_ADMIN');
 ```
+As it stands now, it is needed to manually insert the roles into the db, hence the last query as above.
 
 ## Security & Authentication
 The system uses JWT for authentication and authorization. Upon system start there is a form login page. Should an unauthenticated user try to access an API endpoint different from the form login
