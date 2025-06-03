@@ -402,6 +402,8 @@ does not impose restrictions based on role, in the sense that no endpoint is pro
 ## Demo
 Unfortunately, GitHub does not support the extension of the videos of the demos. In any case, upon download, they should be playable in any modern general purpose video player. I can play those videos on my machine using "Media Player". The videos themselves can be found in the "main" branch of this repo, titled respectively "Login Demo","Category Demo","Expense Demo","Expense Reports Demo" .
 
+![image](https://private-user-images.githubusercontent.com/35684024/450949535-6ade8b3c-1c67-4d5b-879d-6b115e0437fe.PNG?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDg5NzI1NDEsIm5iZiI6MTc0ODk3MjI0MSwicGF0aCI6Ii8zNTY4NDAyNC80NTA5NDk1MzUtNmFkZThiM2MtMWM2Ny00ZDViLTg3OWQtNmIxMTVlMDQzN2ZlLlBORz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTA2MDMlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwNjAzVDE3MzcyMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTQyZTFiNGM3ODA3YmY3ZWZjNWYyM2JiZjNjMjYyODhlYjI0NzNlZWI5NjAzY2NkNzgxNjcwNWY4ZWQzMzhkYjkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.WuzcJIJsKF8iMd5gd8gnI2hrW9IsUuYQLKHz0V7DsNg)
+
 
 
 ## Future Improvements
