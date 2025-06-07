@@ -1,7 +1,6 @@
 package com.momchilgenov.dbcore.dao;
 
 import com.momchilgenov.dbcore.dto.ExpenseDto;
-import com.momchilgenov.dbcore.entity.Category;
 import com.momchilgenov.dbcore.entity.Expense;
 
 import java.util.List;
