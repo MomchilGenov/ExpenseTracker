@@ -1,7 +1,6 @@
 package com.momchilgenov.springboot.mvcweb.security;
 
 import com.momchilgenov.springboot.mvcweb.auth.AuthenticationService;
-import com.momchilgenov.springboot.mvcweb.exception.ExpiredJwtTokenException;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessToken;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtAccessTokenStatus;
 import com.momchilgenov.springboot.mvcweb.token.dto.JwtRefreshToken;
