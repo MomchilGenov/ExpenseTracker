@@ -3,7 +3,12 @@ package com.momchilgenov.springboot.servicecore.security;
 import com.momchilgenov.springboot.servicecore.User;
 import com.momchilgenov.springboot.servicecore.token.JwtAccessToken;
 import com.momchilgenov.springboot.servicecore.token.JwtRefreshToken;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +16,11 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class JwtUtil {
