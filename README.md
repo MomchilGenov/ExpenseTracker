@@ -423,7 +423,6 @@ Unfortunately, GitHub does not support the extension of the videos of the demos.
 ![Image](https://github.com/user-attachments/assets/a0bcde55-4d69-4c00-86b8-bd5f02f42767)
 
 ## Future Improvements
-Future improvements include code style changes such as renaming some classes from ...Repository to ...Service for convention reasons, handling exceptions in some places more gracefully, wrapping sending and return types in ```ResponseEntity``` objects, various renamings, imports optimizations, code cleanup such as unnecessary print statements, a few leftover todos, adding a ```RestTemplate``` bean in ```servicecore``` and ```dbcore``` instead of instantiating it everywhere or all together moving on to asynchronous communication, all sorts of such cleanup and simplification of code where possible.
 In terms of features - a user management page for an admin role user to be able to manage the users within the system - banning, enabling, deleting users and so on.
 Additionally allow for users to form groups and share expenses and keep track of group expenses and individual contributions within a group. Setting a budget and warnings when reaching a given treshold.
 A longer-term feature is creating a javascript implementation of mvcweb, as in a client-side instead of server-side rendering module and expanding ```servicecore``` however needed to make the new module compatible(mainly possible authentication and authorization calls).
