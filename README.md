@@ -1,6 +1,6 @@
 # ExpenseTracker
 
-##NOTICE
+## NOTICE
 To view the code for each microservice - switch to the relevant branch. You are currently on main.
 To view:
 frontend - SingleServerClientMVC
