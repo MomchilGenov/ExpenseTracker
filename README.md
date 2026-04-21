@@ -3,9 +3,9 @@
 ## NOTICE
 To view the code for each microservice - switch to the relevant branch. You are currently on main.
 To view:
-frontend - SingleServerClientMVC
-backnd - ServiceLayer
-db - DBServer
+# frontend - SingleServerClientMVC
+# backnd - ServiceLayer
+# db - DBServer
 
 ## Overview
 If you run into any issues running the project by following the instructions below, feel free to open an issue and describing the problem you are facing.
